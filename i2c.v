@@ -8,11 +8,15 @@ module top (
     output pixartclk,
     output i2c_sda,
     output i2c_scl,
-    output i2c_debug
+    output i2c_debug,
+    output edge_out,
+    input button,
 );
+    
+    reg i2c_clk = 0;
 
-
-    i2c_master i2c(.clk (i2c_clk), .reset (reset), .i2c_sda (i2c_sda), .i2c_scl (i2c_scl));
+    i2c_master i2c(.clk (button_clk), .reset (edge_out), .i2c_sda (i2c_sda), .i2c_scl (i2c_scl), .out(outcount));
+    debounce db1(.clk (button_clk), .button (button), .debounced (edge_out));
 
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
@@ -29,22 +33,24 @@ module top (
         .PLLOUTCORE(pixartclk)
     );
 
-    reg reset = 0;
+    reg reset;
     reg firstreset = 0;
-    reg i2c_clk = 0;
 
-	localparam BITS = 5;
-	localparam LOG2DELAY = 5;
+    initial begin
+        reset = 1;
+    end
 
-	reg [BITS+LOG2DELAY-1:0] counter = 0;
-	reg [BITS-1:0] outcnt;
+	reg [8:0] counter = 0;
+    reg [4:0] outcount;
+	assign {LED1, LED2, LED3, LED4, LED5} = outcount;
 
 	always@(posedge clk) begin
+        reset <= 0;
 		counter <= counter + 1;
-		outcnt <= counter >> LOG2DELAY;
-        if(counter == 0) begin
-            i2c_clk = ~ i2c_clk;
-        end
+        if(counter == 0)
+            button_clk <= ~ button_clk;
+	end
+/*
         if(outcnt == 1) begin
             if(reset == 0 && firstreset == 0) begin
                 reset = 1;
@@ -53,40 +59,57 @@ module top (
             else
                 reset = 0;
         end
-
 	end
-
-    assign { i2c_debug } = reset;
-
+*/
 
 endmodule
+
 module i2c_master(
     input wire clk,
     input wire reset,
     output reg i2c_sda,
-    output reg i2c_scl,
+    output wire i2c_scl,
+    output reg [4:0] out,
 );
-
-    localparam STATE_IDLE = 0;
-    localparam STATE_START = 1;
+    localparam STATE_IDLE = 0; // no clock
+    localparam STATE_START = 1;// no clock
     localparam STATE_ADDR = 2;
     localparam STATE_RW = 3;
     localparam STATE_WACK = 4;
     localparam STATE_DATA = 5;
-    localparam STATE_STOP = 6;
-//    localparam STATE_WACK2 = 7; // if this is uncommented, it breaks the case statement
+    localparam STATE_WACK2 = 6;
+    localparam STATE_STOP = 7; // no clock
 
     reg [8:0] state;
     reg [6:0] addr;
     reg [7:0] count;
     reg [7:0] data;
+    reg i2c_scl_enable = 0;
 
+    initial begin
+        state = STATE_IDLE;
+    end
 
-    assign { i2c_scl } = clk;
+    assign out = state;
+
+    assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
+    
+    always@(negedge clk) begin
+        if( reset == 1 ) begin
+            i2c_scl_enable <= 0;
+        end else begin
+            if ((state == STATE_IDLE) || (state == STATE_START) || (state == STATE_STOP)) begin
+                i2c_scl_enable <= 0;;
+            end
+            else begin
+                i2c_scl_enable <= 1;
+            end
+        end
+    end
 
 	always@(posedge clk) begin
         if( reset == 1 ) begin
-            data <= 8'hAA;
+            data <= data + 1;
             state <= STATE_IDLE;
             i2c_sda <= 1;
     //        i2c_scl <= 1;
@@ -115,14 +138,18 @@ module i2c_master(
                 end
                 STATE_WACK: begin
                     state <= STATE_DATA;
+                    // need to read this data
+                    i2c_sda <= 0;
                     count <= 7;
                 end
                 STATE_DATA: begin
                     i2c_sda <= data[count];
-                    if(count == 0) state <= STATE_STOP;
+                    if(count == 0) state <= STATE_WACK2;
                     else count <= count - 1;
                 end
                 STATE_WACK2: begin
+                    // need to read this data
+                    i2c_sda <= 0;
                     state <= STATE_STOP;
                 end
                 STATE_STOP: begin

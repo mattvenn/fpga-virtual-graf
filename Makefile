@@ -1,11 +1,11 @@
-PROJ = example
+PROJ = i2c
 PIN_DEF = icestick.pcf
 DEVICE = hx1k
 
 all: $(PROJ).rpt $(PROJ).bin
 
 %.blif: %.v
-	yosys -p 'synth_ice40 -top top -blif $@' $<
+	yosys -p 'synth_ice40 -top top -blif $@' $< button.v
 
 %.asc: $(PIN_DEF) %.blif
 	arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^

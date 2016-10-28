@@ -8,3 +8,7 @@ set_io pixartclk 62
 set_io i2c_sda 60
 set_io i2c_scl 61
 set_io i2c_debug 56
+
+set_io button 112
+set_io edge_out 113
+#set_io clk_out 48
