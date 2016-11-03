@@ -22,7 +22,7 @@ module top (
     wire start = 1;
 
     debounce db1(.clk (slow_clk), .button (button), .debounced (dbutton));
-    i2c_init i2c(.clk (slow_clk),  .reset (reset), .start(start), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl));
+    i2c_init i2c(.clk (slow_clk),  .reset (reset), .start(dbutton), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl));
 /*
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
@@ -42,13 +42,13 @@ module top (
 
 	assign {LED1, LED2, LED3, LED4, LED5} = outcount; //state;
 /*
-assign LED1 = i2c_start;
     assign LED2 = dbutton;
     assign LED3 = i2c_ready;
     assign LED4 = reset;
     */
     assign edge_out = dbutton;
 //    assign start = dbutton;
+    assign LED1 = start;
 
 /*
     // can only assign reg in one always block
@@ -62,8 +62,10 @@ assign LED1 = i2c_start;
 
 	always@(posedge clk) begin
 		counter <= counter + 1;
-        if(counter == 0)
+        if(counter > 60) begin
             slow_clk <= ~ slow_clk;
+            counter <= 0;
+        end
 	end
 
 endmodule

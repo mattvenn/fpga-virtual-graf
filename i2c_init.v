@@ -7,7 +7,7 @@ module i2c_init(
     output wire i2c_scl
 );
     reg [8:0] state = STATE_IDLE;
-    reg [6:0] i2c_addr = 7'h20;
+    reg [6:0] i2c_addr = 7'h21;
     reg [7:0] i2c_data;
     reg i2c_start = 0;
     wire i2c_ready;
