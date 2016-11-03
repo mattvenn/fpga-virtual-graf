@@ -8,7 +8,6 @@ module i2c_master(
     input wire start,
     output reg i2c_sda,
     output wire i2c_scl,
-    output reg [4:0] out,
     output wire ready
 );
     localparam STATE_IDLE = 0; // no clock
@@ -31,7 +30,6 @@ module i2c_master(
         state = STATE_IDLE;
     end
 
-//    assign out = state;
     assign ready = (reset == 0) && (state == STATE_STOP || state == STATE_IDLE) ? 1 : 0;
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
     

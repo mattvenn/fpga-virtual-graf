@@ -9,7 +9,6 @@ module top (
     output pixartclk,
     output i2c_sda,
     output i2c_scl,
- //   output i2c_debug,
     output edge_out,
     input button,
 );
@@ -18,11 +17,14 @@ module top (
     wire dbutton;
 	reg [8:0] counter = 0;
     reg [4:0] outcount;
+    reg [3*8-1:0] flat_i2c_data = 48'hABCDEF;
+    reg [2:0] packets = 3;
     wire reset = 0;
     wire start = 1;
 
     debounce db1(.clk (slow_clk), .button (button), .debounced (dbutton));
-    i2c_init i2c(.clk (slow_clk),  .reset (reset), .start(dbutton), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl));
+    i2c_init i2c(.clk (slow_clk),  .reset (reset), .start(dbutton), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl), .packets(packets), .flat_i2c_data(flat_i2c_data));
+
 /*
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
@@ -40,25 +42,15 @@ module top (
     );
     */
 
-	assign {LED1, LED2, LED3, LED4, LED5} = outcount; //state;
+//	assign {LED1, LED2, LED3, LED4, LED5} = outcount; //state;
 /*
     assign LED2 = dbutton;
     assign LED3 = i2c_ready;
     assign LED4 = reset;
     */
     assign edge_out = dbutton;
-//    assign start = dbutton;
     assign LED1 = start;
 
-/*
-    // can only assign reg in one always block
-    always@(dbutton) begin
-        if(dbutton)
-            start = 0;
-        else
-            start = 1;
-    end
-    */
 
 	always@(posedge clk) begin
 		counter <= counter + 1;
