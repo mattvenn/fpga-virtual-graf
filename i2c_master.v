@@ -81,7 +81,7 @@ module i2c_master(
                 end
                 STATE_WACK: begin
                     state <= STATE_DATA;
-                    // need to read this saved_data
+                    // check it goes low?
                     i2c_sda_tri <= 1;
                     count <= 7;
                 end
@@ -91,7 +91,7 @@ module i2c_master(
                     else count <= count - 1;
                 end
                 STATE_WACK2: begin
-                    // need to read this saved_data
+                    // check it goes low?
                     i2c_sda_tri <= 1;
                     state <= STATE_STOP;
                 end
