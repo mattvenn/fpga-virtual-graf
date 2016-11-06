@@ -26,6 +26,11 @@ debug2:
 	vvp i2c -fst
 	gtkwave test.vcd gtk2.gtkw
 
+debug-master:
+	iverilog -o i2c i2c_master_tb.v i2c_master.v 
+	vvp i2c -fst
+	gtkwave test.vcd gtk-master.gtkw
+
 prog: $(PROJ).bin
 	iceprog $<
 

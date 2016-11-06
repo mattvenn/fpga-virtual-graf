@@ -4,8 +4,10 @@ module i2c_master(
     input wire reset,
     //input wire start,
     input wire [6:0] addr,
-    input wire [7:0] data,
+    input wire [12*8-1:0] data, // 12 bytes of data max
+    input wire [4:0] packets,
     input wire start,
+    input wire rw, // 1 for read, 0 for write
     output wire i2c_sda,
     output wire i2c_scl,
     output wire ready
@@ -14,10 +16,11 @@ module i2c_master(
     localparam STATE_START = 1;// no clock
     localparam STATE_ADDR = 2;
     localparam STATE_RW = 3;
-    localparam STATE_WACK = 4;
-    localparam STATE_DATA = 5;
-    localparam STATE_WACK2 = 6;
-    localparam STATE_STOP = 7; // no clock
+    localparam STATE_WACK_1 = 4;
+    localparam STATE_DATA_READ = 5;
+    localparam STATE_DATA_WRITE = 6;
+    localparam STATE_WACK_2 = 7;
+    localparam STATE_STOP = 8; // no clock
 
     reg [8:0] state;
     reg [7:0] count;
@@ -25,7 +28,9 @@ module i2c_master(
     reg i2c_scl_enable = 0;
 
     reg [6:0] saved_addr;
-    reg [7:0] saved_data;
+    reg [12*8-1:0] saved_data; // 12 bytes of data max
+    reg [4:0] saved_packets;
+    reg saved_rw;
 
     initial begin
         state = STATE_IDLE;
@@ -61,6 +66,8 @@ module i2c_master(
                     if (start) begin
                         saved_addr <= addr;
                         saved_data <= data;
+                        saved_rw <= rw;
+                        saved_packets <= packets;
                         state <= STATE_START;
                     end
                     else state <= STATE_IDLE;
@@ -76,24 +83,43 @@ module i2c_master(
                     else count <= count - 1;
                 end
                 STATE_RW: begin
-                    i2c_sda_tri <= 1;
-                    state <= STATE_WACK;
+                    i2c_sda_tri <= saved_rw;
+                    state <= STATE_WACK_1;
                 end
-                STATE_WACK: begin
-                    state <= STATE_DATA;
+                STATE_WACK_1: begin
+                    if(saved_rw) state <= STATE_DATA_READ;
+                    else state <= STATE_DATA_WRITE;
                     // check it goes low?
                     i2c_sda_tri <= 1;
                     count <= 7;
                 end
-                STATE_DATA: begin
-                    i2c_sda_tri <= saved_data[count];
-                    if(count == 0) state <= STATE_WACK2;
+                STATE_DATA_WRITE: begin
+                    i2c_sda_tri <= saved_data[(saved_packets-1)*8+count];
+                    if(count == 0) begin
+                        state <= STATE_WACK_2;
+                        count <= 7;
+                        saved_packets <= saved_packets - 1;
+                    end
                     else count <= count - 1;
                 end
-                STATE_WACK2: begin
+                STATE_DATA_READ: begin
+                    saved_data[(saved_packets-1)*8+count] <= i2c_sda_tri;
+                    if(count == 0) begin
+                        state <= STATE_WACK_2;
+                        count <= 7;
+                        saved_packets <= saved_packets - 1;
+                    end 
+                    else count <= count - 1;
+                end
+                STATE_WACK_2: begin
                     // check it goes low?
                     i2c_sda_tri <= 1;
-                    state <= STATE_STOP;
+                    if(saved_packets == 0)
+                        state <= STATE_STOP;
+                    else begin
+                        if(saved_rw) state <= STATE_DATA_READ;
+                        else state <= STATE_DATA_WRITE;
+                    end
                 end
                 //stay in stop till reset
                 STATE_STOP: begin
