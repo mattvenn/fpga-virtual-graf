@@ -4,10 +4,11 @@ module test;
   /* Make a reset that pulses once. */
   reg reset = 1;
   reg start = 0;
-  reg [4:0] packets = 12;
-  reg rw = 1; // write
-  //reg [12*8-1:0] flat_i2c_data = 16'hAAFF;
-  reg [12*8-1:0] flat_i2c_data = 0;
+  reg [4:0] packets = 2;
+  reg rw = 0; // write
+  reg [12*8-1:0] flat_i2c_data = 16'hAAFF;
+  //reg rw = 1; // read
+  //reg [12*8-1:0] flat_i2c_data = 0;
   reg [6:0] i2c_addr = 7'h21;
   wire i2c_ready;
   integer i;
@@ -26,6 +27,11 @@ module test;
      # 4 start = 1;
      # 2 start = 0;
      wait (i2c_ready == 1);
+     flat_i2c_data = 16'hFFAA;
+     # 4 start = 1;
+     # 2 start = 0;
+     wait (i2c_ready == 1);
+
      $finish;
   end
 

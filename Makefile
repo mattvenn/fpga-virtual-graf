@@ -5,7 +5,7 @@ DEVICE = hx1k
 all: $(PROJ).rpt $(PROJ).bin
 
 %.blif: %.v
-	yosys -p 'synth_ice40 -top top -blif $@' $< button.v i2c_init.v i2c_master.v
+	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v button.v
 
 %.asc: $(PIN_DEF) %.blif
 	arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
@@ -16,15 +16,10 @@ all: $(PROJ).rpt $(PROJ).bin
 %.rpt: %.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
-debug:
-	iverilog -o i2c i2c_tb.v i2c_master.v 
+debug-i2c:
+	iverilog -o i2c i2c_tb.v i2c_master.v button.v
 	vvp i2c -fst
-	gtkwave test.vcd gtk.gtkw
-
-debug2:
-	iverilog -o i2c i2c_init_tb.v i2c_init.v i2c_master.v 
-	vvp i2c -fst
-	gtkwave test.vcd gtk2.gtkw
+	gtkwave test.vcd gtk-i2c.gtkw
 
 debug-master:
 	iverilog -o i2c i2c_master_tb.v i2c_master.v 
