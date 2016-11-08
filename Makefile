@@ -26,6 +26,11 @@ debug-master:
 	vvp i2c -fst
 	gtkwave test.vcd gtk-master.gtkw
 
+debug-camera:
+	iverilog -o camera camera_tb.v camera.v i2c_master.v 
+	vvp camera -fst
+	gtkwave test.vcd gtk-camera.gtkw
+
 prog: $(PROJ).bin
 	iceprog $<
 
