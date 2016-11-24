@@ -6,9 +6,7 @@ module test;
   reg start = 0;
   reg [4:0] packets = 2;
   reg rw = 0; // write
-  reg [12*8-1:0] flat_i2c_data = 16'hAAFF;
-  //reg rw = 1; // read
-  //reg [12*8-1:0] flat_i2c_data = 0;
+  reg [16*8-1:0] flat_i2c_data = 16'hA0F0;
   reg [6:0] i2c_addr = 7'h21;
   wire i2c_ready;
   integer i;

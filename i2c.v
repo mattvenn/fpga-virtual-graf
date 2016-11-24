@@ -9,25 +9,22 @@ module top (
     output pixartclk,
     output i2c_sda,
     output i2c_scl,
+    output cam_reset,
     input button
 );
     
     reg slow_clk;
+    reg i2c_start = 0;
     wire debounced;
     reg deb1;
+    wire [8:0] pos; 
 	reg [8:0] counter = 0;
 
-    reg [2*8-1:0] flat_i2c_data = 32'h3001;
-    reg [6:0] i2c_addr = 7'h58;
-    reg [2:0] packets = 2;
     wire reset = 0;
-    reg i2c_start = 0;
-    wire i2c_ready;
-    wire rw = 0;
 
     debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
 
-    i2c_master i2c(.clk (slow_clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl));
+  camera cam(.clk (slow_clk), .pos(pos), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda(i2c_sda), .start(i2c_start), .cam_reset(cam_reset)); 
 
 /*
     SB_PLL40_CORE #(
@@ -47,13 +44,13 @@ module top (
     */
 
     assign LED1 = debounced;
-    assign LED2 = i2c_ready;
     assign LED3 = i2c_start;
 
   // make a pulse from the button to trigger the i2c comms
-  always@(posedge clk) begin
+  // think there are issues with the clock freqs, slw clock is much slower so can miss a pulse
+  always@(posedge slow_clk) begin
       deb1 <= debounced;
-      if(debounced & ~ deb1 & i2c_ready)
+      if(debounced & ~ deb1)
         i2c_start <= 1;
       else
         i2c_start <= 0;

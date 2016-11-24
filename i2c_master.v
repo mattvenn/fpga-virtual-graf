@@ -2,9 +2,8 @@
 module i2c_master(
     input wire clk,
     input wire reset,
-    //input wire start,
     input wire [6:0] addr,
-    input wire [12*8-1:0] data, // 12 bytes of data max
+    input wire [16*8-1:0] data, // 16 bytes of data max
     input wire [4:0] packets,
     input wire start,
     input wire rw, // 1 for read, 0 for write
@@ -28,7 +27,7 @@ module i2c_master(
     reg i2c_scl_enable = 0;
 
     reg [6:0] saved_addr;
-    reg [12*8-1:0] saved_data; // 12 bytes of data max
+    reg [16*8-1:0] saved_data; // 16 bytes of data max
     reg [4:0] saved_packets;
     reg saved_rw;
 
@@ -44,7 +43,7 @@ module i2c_master(
         if( reset == 1 ) begin
             i2c_scl_enable <= 0;
         end else begin
-            if ((state == STATE_IDLE) || (state == STATE_START) || (state == STATE_STOP)) begin
+            if ((state == STATE_IDLE) || (state == STATE_START))  begin
                 i2c_scl_enable <= 0;
             end
             else begin
@@ -103,6 +102,7 @@ module i2c_master(
                     else count <= count - 1;
                 end
                 STATE_DATA_READ: begin
+                    i2c_sda_tri <= 1;
                     saved_data[(saved_packets-1)*8+count] <= i2c_sda_tri;
                     if(count == 0) begin
                         state <= STATE_WACK_2;
@@ -112,8 +112,11 @@ module i2c_master(
                     else count <= count - 1;
                 end
                 STATE_WACK_2: begin
+                    // if we're reading, we have to do the ack
+                    if(saved_rw) i2c_sda_tri <= 0;
                     // check it goes low?
-                    i2c_sda_tri <= 1;
+                    else i2c_sda_tri <= 1;
+
                     if(saved_packets == 0)
                         state <= STATE_STOP;
                     else begin
@@ -121,9 +124,8 @@ module i2c_master(
                         else state <= STATE_DATA_WRITE;
                     end
                 end
-                //stay in stop till reset
                 STATE_STOP: begin
-                    i2c_sda_tri <= 1;
+                    i2c_sda_tri <= 0;
                     state <= STATE_IDLE;
                 end
             endcase
