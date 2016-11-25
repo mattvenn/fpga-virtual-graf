@@ -21,6 +21,11 @@ debug-i2c:
 	vvp i2c -fst
 	gtkwave test.vcd gtk-i2c.gtkw
 
+debug-leds:
+	iverilog -o leds xy_leds_tb.v xy_leds.v
+	vvp leds -fst
+	gtkwave test.vcd gtk-leds.gtkw
+
 debug-master:
 	iverilog -o i2c i2c_master_tb.v i2c_master.v 
 	vvp i2c -fst
