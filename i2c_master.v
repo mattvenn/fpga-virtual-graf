@@ -9,7 +9,8 @@ module i2c_master(
     input wire rw, // 1 for read, 0 for write
     output wire i2c_sda,
     output wire i2c_scl,
-    output wire ready
+    output wire ready,
+    output reg [16*8-1:0] data_out // 16 bytes of output data
 );
     localparam STATE_IDLE = 0; // no clock
     localparam STATE_START = 1;// no clock
@@ -103,6 +104,10 @@ module i2c_master(
                 end
                 STATE_DATA_READ: begin
                     i2c_sda_tri <= 1;
+                    // seems to be skipping MSB of all but 1st packets
+                    // because we are clocked on pos edge, and nack is still low
+                    // not sure how to solve this as the i2c clock is negative of the clock driving the state machine
+                    // plus assigning to a pin seems to take a clock, but reading happens immediately.
                     saved_data[(saved_packets-1)*8+count] <= i2c_sda_tri;
                     if(count == 0) begin
                         state <= STATE_WACK_2;
@@ -114,12 +119,16 @@ module i2c_master(
                 STATE_WACK_2: begin
                     // if we're reading, we have to do the ack
                     if(saved_rw) i2c_sda_tri <= 0;
-                    // check it goes low?
+
+                    // otherwise the client should ack: check it goes low?
                     else i2c_sda_tri <= 1;
 
-                    if(saved_packets == 0)
+                    if(saved_packets == 0) begin
                         state <= STATE_STOP;
+                        if(saved_rw) data_out <= saved_data;
+                    end
                     else begin
+                        count <= 7;
                         if(saved_rw) state <= STATE_DATA_READ;
                         else state <= STATE_DATA_WRITE;
                     end
