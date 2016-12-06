@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Wed Nov 23 17:19:17 2016
+[*] Tue Dec  6 18:11:32 2016
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/ice-i2c/test.vcd"
-[dumpfile_mtime] "Wed Nov 23 17:15:02 2016"
-[dumpfile_size] 1973
+[dumpfile_mtime] "Tue Dec  6 18:11:12 2016"
+[dumpfile_size] 2437
 [savefile] "/home/mattvenn/work/fpga/ice-i2c/gtk-i2c.gtkw"
-[timestart] 0
+[timestart] 492
 [size] 1600 1176
 [pos] -1 -1
-*-6.023618 23 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.023619 544 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.cam.
 [sst_width] 263
@@ -17,21 +17,39 @@
 [sst_expanded] 1
 [sst_vpaned_height] 252
 @28
+test.LED1
+test.LED2
+test.LED3
+test.LED4
+test.LED5
+@24
+test.x[10:0]
+test.y[10:0]
+@28
 test.clk
 test.db1.button
 test.debounced
 test.deb1
 @2024
-^2 /home/mattvenn/work/fpga/ice-i2c/camera_states.txt
+^1 /home/mattvenn/work/fpga/ice-i2c/camera_states.txt
 test.cam.state[8:0]
-@25
+@24
 test.cam.data_reads[4:0]
+@22
+test.cam.i2c.data_out[127:0]
+@28
+test.cam.i2c.saved_data[127:0]
+@25
+test.cam.i2c.saved_packets[4:0]
 @28
 test.i2c_start
 @2024
-^1 /home/mattvenn/work/fpga/ice-i2c/state_filter.txt
+^2 /home/mattvenn/work/fpga/ice-i2c/state_filter.txt
 test.cam.i2c.state[8:0]
+@22
+test.cam.i2c.count[7:0]
 @28
+test.cam.i2c.saved_rw
 test.i2c_scl
 test.i2c_sda
 [pattern_trace] 1
