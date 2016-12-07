@@ -2,7 +2,11 @@
 module xy_leds(
     input wire [10:0] x,
     input wire [10:0] y,
-    output wire [4:0] leds
+    output wire LED1,
+    output wire LED2,
+    output wire LED3,
+    output wire LED4,
+    output wire LED5
 );
 
     localparam MID_X = 500;
@@ -18,12 +22,12 @@ module xy_leds(
     3
     */
 
-    assign leds[0] = ((x < (MID_X + CENT_D)) && (x > (MID_X - CENT_D)) && (y < (MID_Y + CENT_D)) && (y > (MID_Y - CENT_D))) ? 1 : 0;
+    assign LED1 = ((x < (MID_X + CENT_D)) && (x > (MID_X - CENT_D)) && (y < (MID_Y + CENT_D)) && (y > (MID_Y - CENT_D))) ? 1 : 0;
 
-    assign leds[2] = (x > (MID_X + CENT_D)) ? 1 : 0;
-    assign leds[4] = (x < (MID_X - CENT_D)) ? 1 : 0;
+    assign LED2 = (x > (MID_X + CENT_D)) ? 1 : 0;
+    assign LED3 = (x < (MID_X - CENT_D)) ? 1 : 0;
 
-    assign leds[1] = (y > (MID_Y + CENT_D)) ? 1 : 0;
-    assign leds[3] = (y < (MID_Y - CENT_D)) ? 1 : 0;
+    assign LED4 = (y > (MID_Y + CENT_D)) ? 1 : 0;
+    assign LED5 = (y < (MID_Y - CENT_D)) ? 1 : 0;
 
 endmodule

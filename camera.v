@@ -5,10 +5,11 @@ module camera(
     input wire clk,
     input wire reset,
     input wire start,
-    output wire i2c_sda,
+    inout wire i2c_sda,
     output wire i2c_scl,
-    output reg [8:0] pos,
-    output reg cam_reset 
+    output reg cam_reset,
+    output reg[10:0] x,
+    output reg[10:0] y
 );
     reg [8:0] state = STATE_START;
     reg i2c_start = 0;
@@ -19,6 +20,8 @@ module camera(
     reg [6:0] i2c_addr = 7'h58;
     reg [4:0] data_reads = 0;
     reg [6:0] delay_count = 0;
+    wire [16*8-1:0] pos_data;
+    reg[7:0] s;
 
     localparam STATE_START = 0;
     localparam STATE_CONF_1 = 1;
@@ -33,8 +36,10 @@ module camera(
     localparam STATE_READ_WAIT = 10;
     localparam STATE_STOP = 11;
     localparam STATE_DELAY = 12;
+    localparam STATE_DATA_READY = 13;
+    localparam STATE_PROCESS_DATA = 14;
 
-    i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl));
+    i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl), .data_out(pos_data));
 
     always@(posedge clk) begin
         case(state)
@@ -79,7 +84,17 @@ module camera(
                 packets <= 1;
                 rw <= 0;
                 delay_count <= 0;
-                if(i2c_ready) state <= STATE_DELAY;
+                if(i2c_ready) state <= STATE_PROCESS_DATA;
+            end
+            STATE_PROCESS_DATA: begin
+                // update the camera position
+                s <= pos_data[13*8:12*8];
+                state <= STATE_DATA_READY;
+            end
+            STATE_DATA_READY: begin
+                x <= pos_data[2*8:1*8]; //  + (s & 8'h30) <<4;
+                y <= pos_data[14*8:13*8]  + (s & 8'hC0) <<2;
+                state <= STATE_DELAY;
             end
             STATE_DELAY: begin
                 delay_count <= delay_count + 1;
@@ -103,8 +118,7 @@ module camera(
                 if(i2c_ready) state <= STATE_READ_WAIT;
             end
             STATE_READ_WAIT: begin
-                //if(data_reads >= 2) state <= STATE_STOP;
-                //else state <= STATE_WAIT_3;
+                
                 state <= STATE_WAIT_3;
                 i2c_start <= 0;
             end

@@ -29,6 +29,12 @@ module test;
      # 4 start = 1;
      # 2 start = 0;
      wait (i2c_ready == 1);
+     rw <= 1;
+     packets <= 4;
+     # 4 start = 1;
+     # 2 start = 0;
+     wait (i2c_ready == 1);
+     # 10
 
      $finish;
   end

@@ -4,10 +4,31 @@ set_io LED3 97
 set_io LED4 96
 set_io LED5 95
 set_io clk 21
-set_io pixartclk 62
-set_io i2c_sda 60
-set_io i2c_scl 61
 
-set_io button 112
-set_io cam_reset 113
+set_io pixartclk 62
+set_io i2c_scl 61
+set_io i2c_sda 60
+set_io button 56
+
+set_io cam_reset 48
 #set_io clk_out 48
+
+# J1
+set_io PIO0_02 112 # Pin 3
+set_io PIO0_03 113 # Pin 4
+set_io PIO0_04 114 # Pin 5
+set_io PIO0_05 115 # Pin 6
+set_io PIO0_06 116 # Pin 7
+set_io PIO0_07 117 # Pin 8
+set_io PIO0_08 118 # Pin 9
+set_io PIO0_09 119 # Pin 10
+
+# Connector J3
+#set_io PIO2_17 62 # Pin 3
+#set_io PIO2_16 61 # Pin 4
+#set_io PIO2_15 60 # Pin 5
+#set_io PIO2_14 56 # Pin 6
+#set_io PIO2_13 48 # Pin 7
+#set_io PIO2_12 47 # Pin 8
+#set_io PIO2_11 45 # Pin 9
+#set_io PIO2_10 44 # Pin 10

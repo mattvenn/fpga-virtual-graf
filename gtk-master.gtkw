@@ -1,14 +1,14 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Thu Nov 24 10:32:32 2016
+[*] Fri Nov 25 11:30:31 2016
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/ice-i2c/test.vcd"
-[dumpfile_mtime] "Thu Nov 24 10:30:49 2016"
-[dumpfile_size] 1052
+[dumpfile_mtime] "Fri Nov 25 11:30:13 2016"
+[dumpfile_size] 1192
 [savefile] "/home/mattvenn/work/fpga/ice-i2c/gtk-master.gtkw"
-[timestart] 49
+[timestart] 143
 [size] 1440 848
-[pos] 1522 -403
+[pos] 1522 0
 *-3.044887 69 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [sst_width] 263
@@ -28,9 +28,10 @@ test.i2c.start
 @2024
 ^1 /home/mattvenn/work/fpga/ice-i2c/state_filter.txt
 test.i2c.state[8:0]
-@29
-test.i2c.i2c_scl
 @28
+test.i2c.i2c_scl
 test.i2c.i2c_sda_tri
+@23
+test.i2c.data_out[127:0]
 [pattern_trace] 1
 [pattern_trace] 0

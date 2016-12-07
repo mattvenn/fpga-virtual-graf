@@ -2,7 +2,6 @@
 module test;
 
   reg reset = 1;
-  wire[8:0] pos;
   wire i2c_sda;
   wire i2c_scl;
   wire cam_reset;
@@ -22,7 +21,7 @@ module test;
   reg clk = 0;
   always #1 clk = !clk;
 
-  camera cam(.clk (clk), .pos(pos), .reset (reset), .i2c_scl(i2c_scl), 
+  camera cam(.clk (clk), .reset (reset), .i2c_scl(i2c_scl), 
         .i2c_sda(i2c_sda), .start(start), .cam_reset(cam_reset)); 
 
 endmodule // test

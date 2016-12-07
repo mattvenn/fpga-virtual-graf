@@ -2,10 +2,14 @@ PROJ = i2c
 PIN_DEF = icestick.pcf
 DEVICE = hx1k
 
+SRC = i2c_master.v camera.v button.v xy_leds.v
 all: $(PROJ).rpt $(PROJ).bin
 
-%.blif: %.v
-	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v camera.v button.v xy_leds.v
+%.blif: %.v $(SRC)
+	yosys -p "synth_ice40 -top top -blif $@" $^
+
+#%.blif: %.v $(SRC)
+#	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v camera.v button.v xy_leds.v
 
 %.asc: $(PIN_DEF) %.blif
 	arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
