@@ -7,7 +7,8 @@ module top (
 	output LED4,
 	output LED5,
     output pixartclk,
-    inout i2c_sda,
+    output i2c_sda,
+    input i2c_sda_in,
     output i2c_scl,
     output cam_reset,
     input button,
@@ -43,7 +44,7 @@ module top (
 
     debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
 
-    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda(i2c_sda), .start(i2c_start), .cam_reset(cam_reset), .x(x), .y(y) ); 
+    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .cam_reset(cam_reset), .x(x), .y(y) ); 
 
    xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
 /*

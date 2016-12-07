@@ -7,7 +7,8 @@ module i2c_master(
     input wire [4:0] packets,
     input wire start,
     input wire rw, // 1 for read, 0 for write
-    inout wire i2c_sda,
+    output wire i2c_sda,
+    input wire i2c_sda_in,
     output wire i2c_scl,
     output wire ready,
     output reg [16*8-1:0] data_out // 16 bytes of output data
@@ -107,7 +108,7 @@ module i2c_master(
                     // because we are clocked on pos edge, and nack is still low
                     // not sure how to solve this as the i2c clock is negative of the clock driving the state machine
                     // plus assigning to a pin seems to take a clock, but reading happens immediately.
-                    saved_data[(saved_packets-1)*8+count] <= i2c_sda;
+                    saved_data[(saved_packets-1)*8+count] <= i2c_sda_in;
                     if(count == 0) begin
                         state <= STATE_WACK_2;
                         count <= 7;

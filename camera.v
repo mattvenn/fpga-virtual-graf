@@ -5,7 +5,8 @@ module camera(
     input wire clk,
     input wire reset,
     input wire start,
-    inout wire i2c_sda,
+    output wire i2c_sda,
+    input wire i2c_sda_in,
     output wire i2c_scl,
     output reg cam_reset,
     output reg[10:0] x,
@@ -39,7 +40,7 @@ module camera(
     localparam STATE_DATA_READY = 13;
     localparam STATE_PROCESS_DATA = 14;
 
-    i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_scl(i2c_scl), .data_out(pos_data));
+    i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_sda_in(i2c_sda_in), .i2c_scl(i2c_scl), .data_out(pos_data));
 
     always@(posedge clk) begin
         case(state)
@@ -92,7 +93,7 @@ module camera(
                 state <= STATE_DATA_READY;
             end
             STATE_DATA_READY: begin
-                x <= pos_data[2*8:1*8]; //  + (s & 8'h30) <<4;
+                x <= pos_data[15*8:14*8]  + (s & 8'h30) <<4;
                 y <= pos_data[14*8:13*8]  + (s & 8'hC0) <<2;
                 state <= STATE_DELAY;
             end
