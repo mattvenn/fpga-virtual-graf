@@ -83,6 +83,8 @@ module camera(
                 rw <= 0;
                 delay_count <= 0;
                 if(i2c_ready) state <= STATE_PROCESS_DATA;
+                if(data_ready)
+                    debug <= pos_data;
             end
             STATE_PROCESS_DATA: begin
                 // update the camera position
@@ -112,8 +114,6 @@ module camera(
             end
             STATE_READ: begin
                 i2c_start <= 1;
-                if(data_ready)
-                    debug <= pos_data;
                     
                 if(i2c_ready) state <= STATE_READ_WAIT;
             end
