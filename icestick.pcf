@@ -11,18 +11,18 @@ set_io i2c_sda 60
 set_io i2c_sda_in 56
 set_io button 44
 
-set_io cam_reset 48
+#set_io cam_reset 48
 #set_io clk_out 48
 
 # J1
-set_io PIO0_02 112 # Pin 3
-set_io PIO0_03 113 # Pin 4
-set_io PIO0_04 114 # Pin 5
-set_io PIO0_05 115 # Pin 6
-set_io PIO0_06 116 # Pin 7
-set_io PIO0_07 117 # Pin 8
-set_io PIO0_08 118 # Pin 9
-set_io PIO0_09 119 # Pin 10
+set_io PIO0[0] 112 # Pin 3
+set_io PIO0[1] 113 # Pin 4
+set_io PIO0[2] 114 # Pin 5
+set_io PIO0[3] 115 # Pin 6
+set_io PIO0[4] 116 # Pin 7
+set_io PIO0[5] 117 # Pin 8
+set_io PIO0[6] 118 # Pin 9
+set_io PIO0[7] 119 # Pin 10
 
 # Connector J3
 #set_io PIO2_17 62 # Pin 3

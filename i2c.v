@@ -10,43 +10,26 @@ module top (
     output i2c_sda,
     input i2c_sda_in,
     output i2c_scl,
-    output cam_reset,
     input button,
-    output PIO0_02,
-    output PIO0_03,
-    output PIO0_04,
-    output PIO0_05,
-    output PIO0_06,
-    output PIO0_07,
-    output PIO0_08,
-    output PIO0_09
+    output [7:0] PIO0
 );
     
     reg slow_clk;
-    reg i2c_start = 0;
+    reg i2c_start = 1;
     wire debounced;
     reg deb1;
 	reg [8:0] counter = 0;
 
-    reg[10:0] x;
-    reg[10:0] y;
-
-    assign PIO0_02 = x[9];
-    assign PIO0_03 = slow_clk;
-    assign PIO0_04 = x[7];
-    assign PIO0_05 = x[6];
-    assign PIO0_06 = x[5];
-    assign PIO0_07 = x[4];
-    assign PIO0_08 = x[3];
-    assign PIO0_09 = x[2];
+   // reg[10:0] x;
+   // reg[10:0] y;
 
     wire reset = 0;
 
-    debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
+    //debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
 
-    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .cam_reset(cam_reset), .x(x), .y(y) ); 
+    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .debug(PIO0)); //.x(x), .y(y)); //, .debug(PIO0)); 
 
-   xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
+   //xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
 /*
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),

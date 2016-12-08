@@ -19,7 +19,7 @@ module test;
   wire i2c_sda;
   wire i2c_scl;
   reg i2c_start = 0;
-  reg reset = 1;
+  reg reset = 0;
   reg button = 0;
   wire [8:0] pos;
   reg deb1 = 0;
@@ -40,7 +40,7 @@ module test;
 
   debounce db1(.clk (clk), .button (button), .debounced (debounced));
 
-  camera cam(.clk (clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda(i2c_sda), .start(i2c_start), .cam_reset(cam_reset), .x(x), .y(y) ); 
+  camera cam(.clk (clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda(i2c_sda), .start(i2c_start) ); 
 
    xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
 

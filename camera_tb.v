@@ -1,10 +1,9 @@
 `default_nettype none
 module test;
 
-  reg reset = 1;
+  reg reset = 0;
   wire i2c_sda;
   wire i2c_scl;
-  wire cam_reset;
   reg start = 0;
 
   initial begin
@@ -22,6 +21,6 @@ module test;
   always #1 clk = !clk;
 
   camera cam(.clk (clk), .reset (reset), .i2c_scl(i2c_scl), 
-        .i2c_sda(i2c_sda), .start(start), .cam_reset(cam_reset)); 
+        .i2c_sda(i2c_sda), .start(start) ); 
 
 endmodule // test
