@@ -13,7 +13,7 @@ module i2c_master(
     output wire ready,
     output reg data_ready, // flag to say data is ready to read
     output reg data_req, // flag to request more data to write
-    output reg [7:0] data_out
+    output reg [7:0] data_out // msb (pin 10) is index 7
 );
     localparam STATE_IDLE = 0; // no clock
     localparam STATE_START = 1;// no clock
@@ -93,14 +93,17 @@ module i2c_master(
                 end
                 STATE_WACK_1: begin
                     // grab the first data byte
-                    if(saved_rw) state <= STATE_DATA_READ;
+                    if(saved_rw) begin
+                        count <= 7;
+                        state <= STATE_DATA_READ;
+                    end
                     else begin
                         state <= STATE_DATA_REQ;
                         data_req <= 1;
+                        count <= 7;
                     end    
                     // check it goes low?
                     i2c_sda_tri <= 1;
-                    count <= 7;
                 end
                 STATE_DATA_REQ: begin
                     data_req <= 0;
@@ -113,7 +116,6 @@ module i2c_master(
                     i2c_sda_tri <= saved_data[count];
                     if(count == 0) begin
                         state <= STATE_WACK_2;
-                        count <= 7;
                         saved_packets <= saved_packets - 1;
                     end
                     else count <= count - 1;
@@ -128,32 +130,28 @@ module i2c_master(
                     saved_data[count] <= i2c_sda_in;
                     if(count == 0) begin
                         state <= STATE_WACK_2;
-                        count <= 7;
                         saved_packets <= saved_packets - 1;
                     end 
-                    else count <= count - 1;
+                    count <= count - 1;
                 end
                 STATE_WACK_2: begin
-                    if(saved_rw) begin
-                        // if we're reading, we have to do the ack
-                        i2c_sda_tri <= 0;
-                        // and put the data onto the out register
-                        if(saved_rw) data_out <= saved_data;
-                        // set the data ready pin
-                        data_ready <= 1;
-                    end
-
-                    // otherwise the client should ack: check it goes low?
-                    else begin
-                        i2c_sda_tri <= 1;
-                    end
                     if(saved_packets == 0) begin
                         state <= STATE_STOP;
                     end
                     else begin
-                        count <= 7;
-                        if(saved_rw) state <= STATE_DATA_READ;
+                        if(saved_rw) begin
+                            state <= STATE_DATA_READ;
+                            count <= 7;
+                            // if we're reading, we have to do the ack
+                            i2c_sda_tri <= 0;
+                            // and put the data onto the out register
+                            if(saved_rw) data_out <= saved_data;
+                            // set the data ready pin
+                            data_ready <= 1;
+                        end
                         else begin
+                            i2c_sda_tri <= 1;
+                            count <= 7;
                             state <= STATE_DATA_REQ;
                             data_req <= 1;
                         end
