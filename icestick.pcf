@@ -22,7 +22,7 @@ set_io PIO0[3] 115 # Pin 6
 set_io PIO0[4] 116 # Pin 7
 set_io PIO0[5] 117 # Pin 8
 set_io PIO0[6] 118 # Pin 9
-set_io PIO0[7] 119 # Pin 10
+set_io PIO0[7] 119 # Pin 10 MSB
 
 # Connector J3
 #set_io PIO2_17 62 # Pin 3
