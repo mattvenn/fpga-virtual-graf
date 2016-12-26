@@ -109,25 +109,13 @@ module camera(
             end
             STATE_PROCESS_DATA_1: begin
                 // update the camera position
-                // can't really do this, need a temp buffer to do the sums in then buffer it
-                x <= pos_data[15*8:14*8];
-                y <= pos_data[14*8:13*8]; 
+                //http://wiibrew.org/wiki/Wiimote#Data_Formats
                 s <= pos_data[13*8:12*8];
-                //debug <= s; //pos_data[13*8:12*8];
                 state <= STATE_PROCESS_DATA_2;
-/*
-    Ix[0] = data_buf[1];
-    Iy[0] = data_buf[2];
-    s   = data_buf[3];
-    Ix[0] += (s & 0x30) <<4;
-    Iy[0] += (s & 0xC0) <<2;
-*/
             end
-            //http://wiibrew.org/wiki/Wiimote#Data_Formats
             STATE_PROCESS_DATA_2: begin
-                x <= x + ((s & 8'b00110000) <<4);
-                y <= y + ((s & 8'b11000000) <<2);
-                debug <= x[7:0];
+                x <= pos_data[15*8:14*8] + ((s & 8'b00110000) <<4); // + has precedence over <<
+                y <= pos_data[14*8:13*8] + ((s & 8'b11000000) <<2);
                 state <= STATE_WAIT;
                 delay_count <= 0;
             end
