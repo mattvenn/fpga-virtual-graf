@@ -20,8 +20,8 @@ module top (
     reg deb1;
 	reg [8:0] counter = 0;
 
-    reg[10:0] x;
-    reg[10:0] y;
+    reg[9:0] x;
+    reg[9:0] y;
 
     wire reset = 0;
 
