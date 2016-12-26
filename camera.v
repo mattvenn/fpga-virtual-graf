@@ -125,8 +125,8 @@ module camera(
             end
             //http://wiibrew.org/wiki/Wiimote#Data_Formats
             STATE_PROCESS_DATA_2: begin
-                x <= x + (s & 8'b00110000) <<4;
-                y <= y + (s & 8'b11000000) <<2;
+                x <= x + ((s & 8'b00110000) <<4);
+                y <= y + ((s & 8'b11000000) <<2);
                 debug <= x[7:0];
                 state <= STATE_WAIT;
                 delay_count <= 0;
