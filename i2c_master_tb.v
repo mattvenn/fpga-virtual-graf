@@ -6,8 +6,10 @@ module test;
   reg start = 0;
   reg [4:0] packets = 2;
   reg rw = 0; // write
-  reg [16*8-1:0] flat_i2c_data = 16'hA0F0;
+  reg [7:0] data = 8'hA0;
   reg [6:0] i2c_addr = 7'h21;
+  wire data_req;
+
   wire i2c_ready;
   integer i;
   initial begin
@@ -23,18 +25,19 @@ module test;
      $dumpvars(0,test);
      # 2 reset = 0;
      # 4 start = 1;
-     # 2 start = 0;
+     # 8 start = 0;
+     wait (data_req == 1);
+     data <= 8'hF0;
+     wait (data_req == 1);
+     data <= 8'h0F;
      wait (i2c_ready == 1);
-     flat_i2c_data = 16'hFFAA;
-     # 4 start = 1;
-     # 2 start = 0;
-     wait (i2c_ready == 1);
+
      rw <= 1;
      packets <= 4;
      # 4 start = 1;
-     # 2 start = 0;
+     # 8 start = 0;
      wait (i2c_ready == 1);
-     # 10
+     # 20
 
      $finish;
   end
@@ -44,7 +47,7 @@ module test;
   always #1 clk = !clk;
 
 
-  i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(flat_i2c_data), .reset (reset), .packets(packets), .rw(rw), .start(start), .ready(i2c_ready));
+  i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(data), .reset (reset), .packets(packets), .rw(rw), .start(start), .ready(i2c_ready), .data_req(data_req));
 
 endmodule // test
 

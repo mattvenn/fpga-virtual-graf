@@ -20,16 +20,16 @@ module top (
     reg deb1;
 	reg [8:0] counter = 0;
 
-   // reg[10:0] x;
-   // reg[10:0] y;
+    reg[10:0] x;
+    reg[10:0] y;
 
     wire reset = 0;
 
     //debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
 
-    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .debug(PIO0)); //.x(x), .y(y)); //, .debug(PIO0)); 
+    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .debug(PIO0), .x(x), .y(y)); //, .debug(PIO0)); 
 
-   //xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
+   xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
 /*
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),

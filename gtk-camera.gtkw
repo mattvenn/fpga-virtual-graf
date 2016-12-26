@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Thu Dec  8 12:15:32 2016
+[*] Mon Dec 26 18:39:31 2016
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/ice-i2c/test.vcd"
-[dumpfile_mtime] "Thu Dec  8 12:15:16 2016"
-[dumpfile_size] 2063
+[dumpfile_mtime] "Mon Dec 26 18:39:16 2016"
+[dumpfile_size] 2055
 [savefile] "/home/mattvenn/work/fpga/ice-i2c/gtk-camera.gtkw"
-[timestart] 1008
-[size] 1600 1148
+[timestart] 377
+[size] 1440 876
 [pos] -1 -1
-*-6.051907 1047 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.051907 51 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.cam.
 [sst_width] 263
@@ -18,11 +18,12 @@
 [sst_vpaned_height] 399
 @28
 test.clk
-@23
+@22
 test.cam.debug[7:0]
 @28
 test.reset
 test.cam.data_ready
+@29
 test.cam.data_req
 @22
 test.cam.i2c_data[7:0]

@@ -8,8 +8,8 @@ module camera(
     output wire i2c_sda,
     input wire i2c_sda_in,
     output wire i2c_scl,
-//    output reg[10:0] x,
-//    output reg[10:0] y,
+    output reg[10:0] x,
+    output reg[10:0] y,
     output reg[7:0] debug
 );
     reg [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
@@ -92,8 +92,8 @@ module camera(
                 state <= STATE_DATA_READY;
             end
             STATE_DATA_READY: begin
-                //x <= pos_data[15*8:14*8]  + (s & 8'h30) <<4;
-                //y <= pos_data[14*8:13*8]  + (s & 8'hC0) <<2;
+                x <= pos_data[15*8:14*8]  + (s & 8'h30) <<4;
+                y <= pos_data[14*8:13*8]  + (s & 8'hC0) <<2;
                 state <= STATE_DELAY;
             end
             STATE_DELAY: begin

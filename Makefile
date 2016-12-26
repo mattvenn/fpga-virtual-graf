@@ -2,7 +2,7 @@ PROJ = i2c
 PIN_DEF = icestick.pcf
 DEVICE = hx1k
 
-SRC = i2c_master.v camera.v 
+SRC = i2c_master.v camera.v xy_leds.v
 #button.v 
 #xy_leds.v
 all: $(PROJ).rpt $(PROJ).bin

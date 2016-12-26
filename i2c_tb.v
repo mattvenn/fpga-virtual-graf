@@ -53,7 +53,7 @@ module test;
      # 20 button = 0;
      # 21 button = 1;
      # 20 button = 0;
-     # 1600;
+     # 3600;
      $finish;
   end
 
