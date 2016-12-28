@@ -26,7 +26,7 @@ module camera(
     wire data_ready;
     wire data_req;
     reg [6:0] delay_count = 0;
-    reg [16*8-1:0] pos_data;
+    reg [16*8-1:0] pos_data; // 16 bytes of pos data
     reg[9:0] s;
 
     localparam STATE_START = 0;
@@ -38,9 +38,8 @@ module camera(
     localparam STATE_REQ_DATA_3 = 6;
     localparam STATE_REQ_DATA_4 = 7;
     localparam STATE_REQ_DATA_5 = 8;
-    localparam STATE_PROCESS_DATA_1 = 9;
-    localparam STATE_PROCESS_DATA_2 = 10;
-    localparam STATE_WAIT = 11;
+    localparam STATE_PROCESS_DATA = 9;
+    localparam STATE_WAIT = 10;
 
     i2c_master i2c(.clk (clk),  .addr(i2c_addr), .data(i2c_data), .reset (reset), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_sda_in(i2c_sda_in), .i2c_scl(i2c_scl), .data_out(i2c_data_in), .packets(packets), .data_ready(data_ready), .data_req(data_req));
 
@@ -93,7 +92,7 @@ module camera(
                 packets <= 16;
                 rw <= 1;
                 i2c_start <= 1;
-                data_byte = 15;
+                data_byte = 16;
                 state <= STATE_REQ_DATA_4;
             end
             STATE_REQ_DATA_4: begin
@@ -102,20 +101,18 @@ module camera(
             end
             STATE_REQ_DATA_5: begin
                 if(data_ready) begin
-                    pos_data[(data_byte+1)*8-1 -: 8] <= i2c_data_in;
+                    pos_data[data_byte*8-1 -: 8] <= i2c_data_in;
+                    debug <= i2c_data_in;
                     data_byte <= data_byte - 1;
                 end
-                if(i2c_ready) state <= STATE_PROCESS_DATA_1;
+                if(i2c_ready) state <= STATE_PROCESS_DATA;
             end
-            STATE_PROCESS_DATA_1: begin
+            STATE_PROCESS_DATA: begin
                 // update the camera position
                 //http://wiibrew.org/wiki/Wiimote#Data_Formats
-                s <= pos_data[13*8:12*8];
-                state <= STATE_PROCESS_DATA_2;
-            end
-            STATE_PROCESS_DATA_2: begin
-                x <= pos_data[15*8:14*8] + ((s & 8'b00110000) <<4); // + has precedence over <<
-                y <= pos_data[14*8:13*8] + ((s & 8'b11000000) <<2);
+                // + has precedence over <<
+                x <= pos_data[15*8-1 -:8] + ((pos_data[13*8-1 -:8] & 8'b00110000) <<4); 
+                y <= pos_data[14*8-1 -:8] + ((pos_data[13*8-1 -:8] & 8'b11000000) <<2);
                 state <= STATE_WAIT;
                 delay_count <= 0;
             end

@@ -13,6 +13,8 @@ module xy_leds(
     localparam MID_Y = 768 / 2;
 
     localparam CENT_D = 250;
+    wire data_ok;
+    assign data_ok = y < 1023; // y is 1023 if no blob found
 
     /*
     4
@@ -22,13 +24,13 @@ module xy_leds(
     2
     */
 
-    assign LED5 = (x < (MID_X + CENT_D)) && (x > (MID_X - CENT_D)) ? 1 : 0;
-            // && (y < (MID_Y + CENT_D)) && (y > (MID_Y - CENT_D))) ? 1 : 0;
+    assign LED5 = (x < (MID_X + CENT_D)) && (x > (MID_X - CENT_D)) ? data_ok : 0;
+            // && (y < (MID_Y + CENT_D)) && (y > (MID_Y - CENT_D))) ? data_ok : 0;
 
-    assign LED1 = (x > (MID_X + CENT_D)) ? 1 : 0;
-    assign LED3 = (x < (MID_X - CENT_D)) ? 1 : 0;
+    assign LED1 = (x > (MID_X + CENT_D)) ? data_ok : 0;
+    assign LED3 = (x < (MID_X - CENT_D)) ? data_ok : 0;
 
-    assign LED4 = (y > (MID_Y + CENT_D)) ? 1 : 0;
-    assign LED2 = (y < (MID_Y - CENT_D)) ? 1 : 0;
+    assign LED4 = (y > (MID_Y + CENT_D)) ? data_ok : 0;
+    assign LED2 = (y < (MID_Y - CENT_D)) ? data_ok : 0;
 
 endmodule
