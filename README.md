@@ -1,32 +1,35 @@
 # fpga virtual graffiti
 
+![overview](docs/overview.png)
+
 IR led >> wiimote infrared camera (i2c) >> fpga >> projector (dvi)
 
 my first 'proper' fpga project.
 
-with the icestick usb board, and icestorm free fpga tools.
-with gtkwave for debugging.
+* with the icestick usb board
+* icestorm free fpga tools.
+* gtkwave for debugging.
 
-# i2c reader / writer
-
-based on useful youtube series:https://www.youtube.com/watch?v=rWzB5hZlqBA
-by Tom Briggs.
-
-currently having problems with reading i2c data:
-Can read setup and requets i2c data, but testbench shows data will be corrupt.
+# I2C reader / writer
 
 ![fpga read](docs/fpga-i2c-read.png)
 
-currently having problems with reading i2c data:
+Started off with this youtube series:https://www.youtube.com/watch?v=rWzB5hZlqBA
+by Tom Briggs.
 
-![fpga read](docs/i2c-read-fail.png)
+In Tom's design, the I2C clock is assigned to the state machine's !clk.
 
-image made with gtkwave: 
+Writing and requesting data was easy, but reading the data was difficult to
+synchronize the clock. I then tried 2 different approaches:
 
-    make debug-i2c 
+* separating the I2C clock and state machine clock to give more time for reading
+ data (4 state machine clocks for 1 I2C clock)
+* generating the clock within the state machine itself.
 
-Picture shows 1st byte reads FF, but second 7F because first bit is read as 0.
+Option 2 proved much easier to write. I also found this [brief Q&A on reddit on
+the same topic](https://m.reddit.com/r/FPGA/comments/4oltue/when_writing_communication_protocols_spi_i2c_etc/)
 
-I think because I'm sampling sda in the time when i2c data is allowed to change. 
+# DVI output
 
-This is because sck is assigned to !clk, but the state machine is clocked on positive edge of clk.
+based on [Hamster's minimal DVI-D
+VHDL](http://hamsterworks.co.nz/mediawiki/index.php/Minimal_DVI-D)
