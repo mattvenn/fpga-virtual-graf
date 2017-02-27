@@ -27,8 +27,8 @@ module xy_leds(
     assign LED5 = (x < (MID_X + CENT_D)) && (x > (MID_X - CENT_D)) ? data_ok : 0;
             // && (y < (MID_Y + CENT_D)) && (y > (MID_Y - CENT_D))) ? data_ok : 0;
 
-    assign LED1 = (x > (MID_X + CENT_D)) ? data_ok : 0;
-    assign LED3 = (x < (MID_X - CENT_D)) ? data_ok : 0;
+    assign LED1 = (x < (MID_X - CENT_D)) ? data_ok : 0;
+    assign LED3 = (x > (MID_X + CENT_D)) ? data_ok : 0;
 
     assign LED4 = (y > (MID_Y + CENT_D)) ? data_ok : 0;
     assign LED2 = (y < (MID_Y - CENT_D)) ? data_ok : 0;
