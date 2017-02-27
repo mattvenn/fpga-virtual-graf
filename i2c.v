@@ -39,7 +39,7 @@ module top (
         .DIVQ(3'b101),
         .FILTER_RANGE(3'b001)
     ) uut (
-        .LOCK(lock),
+/        .LOCK(lock),
         .RESETB(1'b1),
         .BYPASS(1'b0),
         .REFERENCECLK(clk),
