@@ -2,9 +2,7 @@
 
 ![overview](docs/overview.png)
 
-IR led >> wiimote infrared camera (i2c) >> fpga >> projector (dvi)
-
-my first 'proper' fpga project.
+my first 'proper' FPGA project.
 
 * with the icestick usb board
 * icestorm free fpga tools.
