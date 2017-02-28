@@ -33,3 +33,12 @@ set_io PIO0[7] 119 # Pin 10 MSB
 #set_io PIO2_12 47 # Pin 8
 #set_io PIO2_11 45 # Pin 9
 #set_io PIO2_10 44 # Pin 10
+
+set_io --warn-no-port PMOD[0] 78
+set_io --warn-no-port PMOD[1] 79
+set_io --warn-no-port PMOD[2] 80
+set_io --warn-no-port PMOD[3] 81
+set_io --warn-no-port PMOD[4] 87
+set_io --warn-no-port PMOD[5] 88
+set_io --warn-no-port PMOD[6] 90
+set_io --warn-no-port PMOD[7] 91
