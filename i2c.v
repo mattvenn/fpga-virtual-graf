@@ -1,22 +1,17 @@
 `default_nettype none
-`define 126M_PLL // correct for 25mhz vga clock
 module top (
 	input  clk,
-	output LED1,
-	output LED2,
-	output LED3,
-	output LED4,
-	output LED5,
+	output [0:3] LED,
     output pixartclk,
+    output pixart_reset,
     output i2c_sda,
     input i2c_sda_in,
     output i2c_scl,
     input button,
-    output [7:0] PIO0,
-    output [7:0] PMOD
+    output [31:0] PMOD
 );
     
-    reg slow_clk;
+    reg cam_clk;
     reg i2c_start = 1;
     wire debounced;
     reg deb1;
@@ -26,35 +21,21 @@ module top (
     reg[9:0] y;
 
     wire reset = 0;
+    assign pixart_reset = 1;
 
-    //debounce db1(.clk (slow_clk), .button (button), .debounced (debounced));
+    clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
+    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
-    camera cam(.clk (slow_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .debug(PIO0), .x(x), .y(y)); //, .debug(PIO0)); 
-
-   xy_leds leds(.x(x), .y(y), .LED1(LED1), .LED2(LED2),.LED3(LED3),.LED4(LED4),.LED5(LED5));
+   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
 
     //PLL details http://www.latticesemi.com/view_document?document_id=47778
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
         .PLLOUT_SELECT("GENCLK"),
-        `ifdef 50M_PLL
-        .DIVR(4'b0000),
-        .DIVF(7'b1000010),
-        .DIVQ(3'b100),
-        .FILTER_RANGE(3'b001)
-        `endif
-        `ifdef 126M_PLL
-        .DIVR(4'b0000),
-        .DIVF(7'b1010011),
+        .DIVR(4'b1001),
+        .DIVF(7'b1100100),
         .DIVQ(3'b011),
         .FILTER_RANGE(3'b001)
-        `endif
-        `ifdef 200M_PLL
-        .DIVR(4'b0000),
-        .DIVF(7'b1000010),
-        .DIVQ(3'b010),
-        .FILTER_RANGE(3'b001)
-        `endif
     ) uut (
 //        .LOCK(lock),
         .RESETB(1'b1),
@@ -63,29 +44,7 @@ module top (
         .PLLOUTCORE(clkx5)
     );
 
-//    assign LED1 = debounced;
-//    assign LED3 = i2c_start;
-
-  // make a pulse from the button to trigger the i2c comms
-  // think there are issues with the clock freqs, slw clock is much slower so can miss a pulse
-  always@(posedge slow_clk) begin
-      deb1 <= debounced;
-      if(debounced & ~ deb1)
-        i2c_start <= 1;
-      else
-        i2c_start <= 0;
-  end
-    
-    // generate the slow clock for the i2c bus & button debounce
-	always@(posedge clk) begin
-		counter <= counter + 1;
-        if(counter > 60) begin
-            slow_clk <= ~ slow_clk;
-            counter <= 0;
-        end
-	end
-
-    wire clkx5;
+  wire clkx5;
   wire hsync;
   wire vsync;
   wire blank;
@@ -99,5 +58,14 @@ module top (
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
 
+/*
+    assign PMOD[0] = hsync;
+    assign PMOD[1] = vsync;
+    assign PMOD[2] = blank;
+    assign PMOD[3] = vga_clk;
+    assign PMOD[4] = clkx5;
+    assign PMOD[5] = clk;
+    assign PMOD[6] = slow_clk;
+    */
 
 endmodule

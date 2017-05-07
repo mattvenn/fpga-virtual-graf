@@ -1,6 +1,6 @@
 PROJ = i2c
-PIN_DEF = icestick.pcf
-DEVICE = hx1k
+PIN_DEF = blackice.pcf
+DEVICE = hx8k
 
 SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v
 #button.v 
@@ -14,7 +14,8 @@ all: $(PROJ).rpt $(PROJ).bin
 #	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v camera.v button.v xy_leds.v
 
 %.asc: $(PIN_DEF) %.blif
-	arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
+	#arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
+	arachne-pnr --device 8k --package tq144:4k -o $@ -p $^
 
 %.bin: %.asc
 	icepack $< $@
@@ -42,8 +43,11 @@ debug-camera:
 	vvp camera -fst
 	gtkwave test.vcd gtk-camera.gtkw
 
+#prog: $(PROJ).bin
+#	iceprog $<
+
 prog: $(PROJ).bin
-	iceprog $<
+	bash -c "cat $< > /dev/ttyUSB0"
 
 sudo-prog: $(PROJ).bin
 	@echo 'Executing prog as root!!!'

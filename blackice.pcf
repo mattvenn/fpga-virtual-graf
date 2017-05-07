@@ -1,0 +1,158 @@
+################################################################################
+##                                                                             #
+## Copyright 2016 myStorm Copyright and related                                #
+## rights are licensed under the Solderpad Hardware License, Version 0.51      #
+## (the “License”); you may not use this file except in compliance with        #
+## the License. You may obtain a copy of the License at                        #
+## http://solderpad.org/licenses/SHL-0.51. Unless required by applicable       #
+## law or agreed to in writing, software, hardware and materials               #
+## distributed under this License is distributed on an “AS IS” BASIS,          #
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or             #
+## implied. See the License for the specific language governing                #
+## permissions and limitations under the License.                              #
+##                                                                             #
+################################################################################
+#
+## User Constraint File for myStorm
+#
+##pmod 1
+#
+set_io --warn-no-port PMOD[0] 94 # rd6
+set_io --warn-no-port PMOD[1] 91 # rd4
+set_io --warn-no-port PMOD[2] 88 # rd2
+set_io --warn-no-port PMOD[3] 85 # rd0
+
+#pmod 2
+set_io --warn-no-port PMOD[4] 95 # rd7
+set_io --warn-no-port PMOD[5] 93 # rd5
+set_io --warn-no-port PMOD[6] 90 # rd3
+set_io --warn-no-port PMOD[7] 87 # rd1
+
+#pmod 3 GPIO
+#set_io --warn-no-port PMOD[8] 105 # c5
+#set_io --warn-no-port PMOD[9] 102 # c3
+#set_io --warn-no-port PMOD[10] 99 # c1
+#set_io --warn-no-port PMOD[11] 97 # i_tx
+
+set_io i2c_scl 105
+set_io i2c_sda 102
+set_io i2c_sda_in 99
+set_io pixart_reset 97
+#set_io pixartclk 62
+#set_io button 44
+
+#pmod 4
+set_io --warn-no-port PMOD[12] 104 # c4
+set_io --warn-no-port PMOD[13] 101 # c2
+set_io --warn-no-port PMOD[14] 98 # c0
+set_io --warn-no-port PMOD[15] 96 # i_rx
+#
+##pmod 5 GPIO
+set_io --warn-no-port PMOD[16] 143 #g2
+set_io --warn-no-port PMOD[17] 114 #c11
+set_io --warn-no-port PMOD[18] 112 #c9
+set_io --warn-no-port PMOD[19] 107 #c7
+#
+##pmod 6 GPIO
+set_io --warn-no-port PMOD[20] 144 #G1
+set_io --warn-no-port PMOD[21] 113 #C10
+set_io --warn-no-port PMOD[22] 110 #C8
+set_io --warn-no-port PMOD[23] 106 #C6
+#
+##pmod 7 lvds pairs 2 & 5
+set_io --warn-no-port PMOD[24] 10 # 5b
+set_io --warn-no-port PMOD[25] 9 # 5a
+set_io --warn-no-port PMOD[26] 2 # 2b
+set_io --warn-no-port PMOD[27] 1 # 2a
+#
+##pmod 8 lvds pairs 3 & 4
+set_io --warn-no-port PMOD[28] 8 # 4b
+set_io --warn-no-port PMOD[29] 7 # 4a
+set_io --warn-no-port PMOD[30] 4 # 3b
+set_io --warn-no-port PMOD[31] 3 # 3a
+#
+##pmod 9 lvds pairs 10 & 13
+#set_io --warn-no-port PMOD[32] 20 # 13b
+#set_io --warn-no-port PMOD[33] 19 # 13a
+#set_io --warn-no-port PMOD[34] 16 # 10b
+#set_io --warn-no-port PMOD[35] 15 # 10a
+#
+##pmod 10 lvds pairs 8 & 12
+#set_io --warn-no-port PMOD[36] 18 # 12b
+#set_io --warn-no-port PMOD[37] 17 # 12a
+#set_io --warn-no-port PMOD[38] 12 # 8b
+#set_io --warn-no-port PMOD[39] 11 # 8a
+#
+##pmod 11 lvds pairs 14 & 25
+#set_io --warn-no-port PMOD[40] 34 # 25b
+#set_io --warn-no-port PMOD[41] 33 # 25a
+#set_io --warn-no-port PMOD[42] 22 # 14B
+#set_io --warn-no-port PMOD[43] 21 # 14a
+#
+##pmod 12 lvds pairs 18 & 24
+#set_io --warn-no-port PMOD[44] 32 # 24b
+#set_io --warn-no-port PMOD[45] 31 # 24a
+#set_io --warn-no-port PMOD[46] 26 # 18b
+#set_io --warn-no-port PMOD[47] 25 # 18a
+#
+##pmod 13 lvds pairs 17 & 23
+#set_io --warn-no-port PMOD[48] 29 # 23b
+#set_io --warn-no-port PMOD[49] 28 # 23a
+#set_io --warn-no-port PMOD[50] 24 # 17b
+#set_io --warn-no-port PMOD[51] 23 # 17a
+#
+#pmod 14 SPI muxed with leds
+#set_io --warn-no-port PMOD[52] 71 #LD4,!SS,p14_1
+#set_io --warn-no-port PMOD[53] 67 #LD3,MISO,p14_2
+#set_io --warn-no-port PMOD[54] 68 #LD2,MOSI,p14_3
+#set_io --warn-no-port PMOD[55] 70 #LD1,SCL,p14_4
+#
+# SRAM
+set_io --warn-no-port ADR[0] 137
+set_io --warn-no-port ADR[1] 138
+set_io --warn-no-port ADR[2] 139
+set_io --warn-no-port ADR[3] 141
+set_io --warn-no-port ADR[4] 142
+set_io --warn-no-port ADR[5] 42
+set_io --warn-no-port ADR[6] 43
+set_io --warn-no-port ADR[7] 44
+set_io --warn-no-port ADR[8] 73
+set_io --warn-no-port ADR[9] 74
+set_io --warn-no-port ADR[10] 75
+set_io --warn-no-port ADR[11] 76
+set_io --warn-no-port ADR[12] 115
+set_io --warn-no-port ADR[13] 116
+set_io --warn-no-port ADR[14] 117
+set_io --warn-no-port ADR[15] 118
+set_io --warn-no-port ADR[16] 119
+set_io --warn-no-port ADR[17] 78
+#set_io --warn-no-port ADR[18] 62
+
+set_io --warn-no-port DAT[0] 135
+set_io --warn-no-port DAT[1] 134
+set_io --warn-no-port DAT[2] 130
+set_io --warn-no-port DAT[3] 128
+set_io --warn-no-port DAT[4] 125
+set_io --warn-no-port DAT[5] 124
+set_io --warn-no-port DAT[6] 122
+set_io --warn-no-port DAT[7] 121
+set_io --warn-no-port DAT[8] 61
+set_io --warn-no-port DAT[9] 60
+set_io --warn-no-port DAT[10] 56
+set_io --warn-no-port DAT[11] 55
+set_io --warn-no-port DAT[12] 52
+set_io --warn-no-port DAT[13] 49
+set_io --warn-no-port DAT[14] 48
+set_io --warn-no-port DAT[15] 47
+
+set_io --warn-no-port RAMOE 45
+set_io --warn-no-port RAMWE 120
+set_io --warn-no-port RAMCS 136
+
+## Onboard 100Mhz oscillator
+set_io --warn-no-port clk 129
+set_io --warn-no-port LED[0] 71 #LD4,!SS,p14_1
+set_io --warn-no-port LED[1] 67 #LD3,MISO,p14_2
+set_io --warn-no-port LED[2] 68 #LD2,MOSI,p14_3
+set_io --warn-no-port LED[3] 70 #LD1,SCL,p14_4
+#
