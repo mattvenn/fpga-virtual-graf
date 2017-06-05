@@ -2,10 +2,9 @@ PROJ = i2c
 PIN_DEF = blackice.pcf
 DEVICE = hx8k
 
-SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v
-#button.v 
-#xy_leds.v
-all: $(PROJ).rpt $(PROJ).bin
+SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v
+
+all: $(PROJ).bin $(PROJ).rpt 
 
 %.blif: %.v $(SRC)
 	yosys -p "synth_ice40 -top top -blif $@" $^
@@ -47,7 +46,7 @@ debug-camera:
 #	iceprog $<
 
 prog: $(PROJ).bin
-	bash -c "cat $< > /dev/ttyUSB0"
+	bash -c "cat $< > /dev/ttyUSB1"
 
 sudo-prog: $(PROJ).bin
 	@echo 'Executing prog as root!!!'

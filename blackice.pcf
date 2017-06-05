@@ -47,7 +47,7 @@ set_io --warn-no-port PMOD[13] 101 # c2
 set_io --warn-no-port PMOD[14] 98 # c0
 set_io --warn-no-port PMOD[15] 96 # i_rx
 #
-##pmod 5 GPIO
+##pmod 5 GPIO (top level of pins)
 set_io --warn-no-port PMOD[16] 143 #g2
 set_io --warn-no-port PMOD[17] 114 #c11
 set_io --warn-no-port PMOD[18] 112 #c9
