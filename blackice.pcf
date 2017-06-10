@@ -44,7 +44,7 @@ set_io i2c_scl 102
 set_io pixartclk 99
 set_io pixart_reset 97
 
-set_io i2c_sda_in 104
+set_io i2c_sda_dir 104
 
 #set_io pixartclk 62
 #set_io button 44

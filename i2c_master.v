@@ -8,6 +8,7 @@ module i2c_master(
     input wire start,
     input wire rw, // 1 for read, 0 for write
     output wire i2c_sda,
+    output wire i2c_sda_dir,
     input wire i2c_sda_in,
     output wire i2c_scl,
     output wire ready,
@@ -39,6 +40,8 @@ module i2c_master(
     reg [7:0] count;
     reg i2c_sda_tri;
     reg i2c_scl_enable = 0;
+
+    assign i2c_sda_dir  = ~ i2c_sda_tri;
 
     reg [6:0] saved_addr;
     reg [7:0] saved_data; // 16 bytes of data max

@@ -4,9 +4,10 @@ module top (
 	output [0:3] LED,
     output pixartclk,
     output pixart_reset,
-    output i2c_sda,
-    input i2c_sda_in,
+    inout i2c_sda,
+//    input i2c_sda_in,
     output i2c_scl,
+    output i2c_sda_dir,
     input button,
     output [31:0] PMOD
 );
@@ -22,11 +23,25 @@ module top (
 
     wire reset = 0;
     assign pixart_reset = 1;
+    assign pixartclk = vga_clk;
+
+    wire i2c_sda_out;
+    wire i2c_sda_in;
+//    wire i2c_sda_dir;
 
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
-    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+    camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
    xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+
+    SB_IO #(
+        .PIN_TYPE(6'b 1010_01),
+    ) i2c_sda_pin (
+        .PACKAGE_PIN(i2c_sda),
+        .OUTPUT_ENABLE(i2c_sda_dir),
+        .D_OUT_0(i2c_sda_out),
+        .D_IN_0(i2c_sda_in),
+    );
 
     //PLL details http://www.latticesemi.com/view_document?document_id=47778
     SB_PLL40_CORE #(
