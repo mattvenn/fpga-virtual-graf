@@ -8,6 +8,12 @@ my first 'proper' FPGA project.
 * icestorm free fpga tools.
 * gtkwave for debugging.
 
+# Wiimote Camera
+
+* (breakout board)[https://github.com/mattvenn/kicad/tree/master/wiimote-fpga)
+* 25mhz supplied on clock pin
+* reset high to run
+
 # I2C reader / writer
 
 ![fpga read](docs/fpga-i2c-read.png)

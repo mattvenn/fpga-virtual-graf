@@ -47,7 +47,7 @@ debug-camera:
 #	iceprog $<
 
 prog: $(PROJ).bin
-	bash -c "cat $< > /dev/ttyUSB0"
+	bash -c "cat $< > /dev/ttyUSB1"
 
 sudo-prog: $(PROJ).bin
 	@echo 'Executing prog as root!!!'
