@@ -1,4 +1,8 @@
 `default_nettype none
+// if all the following are defined, will get the 'fail to place pll' error. If any one is undefined, p-n-r succeeds
+`define pll_fail1
+`define pll_fail2
+`define pll_fail3
 module top (
 	input  clk,
 	output [0:3] LED,
@@ -29,11 +33,9 @@ module top (
     assign pixart_reset = 1;
 
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
-    /*
-    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+//    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
-*/
-   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+//   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
 
     SB_IO #(
         .PIN_TYPE(6'b 1010_01),
@@ -43,7 +45,7 @@ module top (
         .D_OUT_0(data_pins_out),
         .D_IN_0(data_pins_in),
     );
-
+`ifdef pll_fail3
     //PLL details http://www.latticesemi.com/view_document?document_id=47778
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
@@ -59,7 +61,7 @@ module top (
         .REFERENCECLK(clk),
         .PLLOUTCORE(clkx5)
     );
-
+`endif
   wire clkx5;
   wire hsync;
   wire vsync;
@@ -68,17 +70,19 @@ module top (
   wire [2:0] green;
   wire [2:0] blue;
     wire vga_clk;
-
     clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
+ `ifdef pll_fail1
     vga vga_test(.line(data_read), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue));
-
+ `endif
+ `ifdef pll_fail2
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
-
-
+`endif
+/*
     assign PMOD[16] = hsync;    // 3
     assign PMOD[17] = vsync;    // 2
     assign PMOD[18] = blank;    // 1
     assign PMOD[19] = vga_clk;  // 0
+    */
     
 
     reg [17:0] address;

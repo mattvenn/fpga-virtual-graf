@@ -72,10 +72,10 @@ set_io --warn-no-port PMOD[30] 4 # 3b
 set_io --warn-no-port PMOD[31] 3 # 3a
 #
 ##pmod 9 lvds pairs 10 & 13
-#set_io --warn-no-port PMOD[32] 20 # 13b
-#set_io --warn-no-port PMOD[33] 19 # 13a
-#set_io --warn-no-port PMOD[34] 16 # 10b
-#set_io --warn-no-port PMOD[35] 15 # 10a
+set_io --warn-no-port PMOD[32] 20 # 13b
+set_io --warn-no-port PMOD[33] 19 # 13a
+set_io --warn-no-port PMOD[34] 16 # 10b
+set_io --warn-no-port PMOD[35] 15 # 10a
 #
 ##pmod 10 lvds pairs 8 & 12
 #set_io --warn-no-port PMOD[36] 18 # 12b
