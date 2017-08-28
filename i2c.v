@@ -45,6 +45,8 @@ module top (
     );
 
     //PLL details http://www.latticesemi.com/view_document?document_id=47778
+    //vga clock freq is 25.2MHz (see vga.v)
+    //need 5 times this for dvi output = 126MHz, so this PLL input is 100MHz (blackice clock), output is 126MHz.
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
         .PLLOUT_SELECT("GENCLK"),
