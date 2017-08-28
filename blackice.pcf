@@ -141,7 +141,9 @@ set_io --warn-no-port DAT[9] 60
 set_io --warn-no-port DAT[10] 56
 set_io --warn-no-port DAT[11] 55
 set_io --warn-no-port DAT[12] 52
-set_io --warn-no-port DAT[13] 49
+# can't use this IO
+# https://github.com/cseed/arachne-pnr/issues/64#issuecomment-310877601
+#set_io --warn-no-port DAT[13] 49 
 set_io --warn-no-port DAT[14] 48
 set_io --warn-no-port DAT[15] 47
 
