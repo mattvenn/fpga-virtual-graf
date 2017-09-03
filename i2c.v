@@ -31,9 +31,9 @@ module top (
 
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
 
-//    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
- //  xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
 
     SB_IO #(
         .PIN_TYPE(6'b 1010_01),
@@ -155,16 +155,13 @@ module top (
             // should have 1.4ms for this to complete
             STATE_WRITE: begin
                 write <= 1;
-                address <= address + 1;
-                data_write <= BUTTON[0] ? 16'hffff : 16'h0;
+                address <= x / 16 + y * 40;
+                data_write <= 16'h0ff0;
                 ram_state <= STATE_WRITE_WAIT;
             end
             STATE_WRITE_WAIT: begin
                 if(ready) begin
-                    if(address > 19200)
-                        ram_state <= STATE_IDLE;
-                    else
-                        ram_state <= STATE_WRITE;
+                    ram_state <= STATE_IDLE;
                 end
             end
 

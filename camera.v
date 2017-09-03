@@ -9,8 +9,8 @@ module camera(
     input wire i2c_sda_in,
     output wire i2c_scl,
     output reg[9:0] x,
-    output reg[9:0] y,
-    output reg[7:0] debug
+    output reg[9:0] y
+ //   output reg[7:0] debug
 );
     reg [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
     reg [3:0] config_byte = 5;
@@ -27,7 +27,7 @@ module camera(
     wire data_req;
     reg [6:0] delay_count = 0;
     reg [16*8-1:0] pos_data; // 16 bytes of pos data
-    reg[9:0] s;
+//    reg[9:0] s;
 
     localparam STATE_START = 0;
     localparam STATE_CONF = 1;
@@ -102,7 +102,7 @@ module camera(
             STATE_REQ_DATA_5: begin
                 if(data_ready) begin
                     pos_data[data_byte*8-1 -: 8] <= i2c_data_in;
-                    debug <= i2c_data_in;
+                    //debug <= i2c_data_in;
                     data_byte <= data_byte - 1;
                 end
                 if(i2c_ready) state <= STATE_PROCESS_DATA;
