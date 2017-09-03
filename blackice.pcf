@@ -101,11 +101,10 @@ set_io --warn-no-port PMOD[31] 3 # 3a
 #set_io --warn-no-port PMOD[50] 24 # 17b
 #set_io --warn-no-port PMOD[51] 23 # 17a
 #
-#pmod 14 SPI muxed with leds
-#set_io --warn-no-port PMOD[52] 71 #LD4,!SS,p14_1
-#set_io --warn-no-port PMOD[53] 67 #LD3,MISO,p14_2
-#set_io --warn-no-port PMOD[54] 68 #LD2,MOSI,p14_3
-#set_io --warn-no-port PMOD[55] 70 #LD1,SCL,p14_4
+
+set_io --warn-no-port BUTTON[0] 63
+set_io --warn-no-port BUTTON[1] 64
+
 #
 # SRAM
 set_io --warn-no-port ADR[0] 137

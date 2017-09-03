@@ -1,3 +1,13 @@
+/*
+mystorm blackice has 0.5MByte SRAM on the back of the board
+From datasheet: ISSI IS62WV25616DALL and IS62/65WV25616DBLL are high-speed, low power, 4M bit SRAMs organized as 256K words by 16 bits. 
+
+a problem with the blackice board is that the PLL lines interfere with the SRAM data lines.
+
+https://github.com/cseed/arachne-pnr/issues/64#issuecomment-310877601
+
+hence reading/writing to data[13] will not work.
+*/
 `default_nettype none
 module sram (
     input wire reset,

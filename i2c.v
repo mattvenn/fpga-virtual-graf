@@ -2,6 +2,7 @@
 module top (
 	input  clk,
 	output [0:3] LED,
+    input [0:1] BUTTON,
     output pixartclk,
     output pixart_reset,
     output i2c_sda,
@@ -22,18 +23,17 @@ module top (
     reg deb1;
 	reg [8:0] counter = 0;
 
-    reg[9:0] x = 50;
-    reg[9:0] y = 50;
+    reg[9:0] x;
+    reg[9:0] y;
 
     wire reset = 0;
     assign pixart_reset = 1;
 
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
-    /*
-    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
-*/
-   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+//    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+
+ //  xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
 
     SB_IO #(
         .PIN_TYPE(6'b 1010_01),
@@ -108,7 +108,10 @@ module top (
                     ram_state <= 1;
             end
             1: begin
-               ram_state <= 2;
+               if(BUTTON[0])
+                   ram_state <= 2;
+               else
+                   ram_state <= 0;
                read <= 0;
             end
             2: begin
