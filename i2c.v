@@ -72,7 +72,7 @@ module top (
     wire vga_clk;
 
     clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
-    vga vga_test(.line(data_read), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue));
+    vga vga_test(.pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
 
@@ -94,36 +94,80 @@ module top (
     wire [15:0] data_pins_out;
     wire data_pins_out_en;
 
-    reg [2:0] ram_state = 0;
+    reg [3:0] ram_state = 0;
+    reg [639:0] line_buffer;
 
+    wire pixel;
+    assign pixel = line_buffer[vga_x];
+
+    wire [10:0] hcounter;
+    wire [9:0] vcounter;
+
+    wire [9:0] vga_x;
+    wire [8:0] vga_y;
+
+    assign vga_x = hcounter < 640 ? hcounter : 0;
+    assign vga_y = vcounter < 480 ? vcounter : 0;
+
+    reg [5:0] line_buffer_index; // offset into memory for each block of 16 pixels
+
+    // SRAM buffer state machine
+    localparam STATE_IDLE = 0;
+    localparam STATE_READ = 1;
+    localparam STATE_READ_WAIT = 2;
+    localparam STATE_BUFF_WRITE = 3;
+    localparam STATE_WRITE = 4;
+    localparam STATE_WRITE_WAIT = 5;
 
     always @(posedge clk) begin
         
+        // fill up the bram from the sram at the end of the line
         case(ram_state)
-            0: begin
-                ram_state <= 0;
-                read <= 1;
-                address <= 0;
-                if(vsync == 0)
-                    ram_state <= 1;
-            end
-            1: begin
-               if(BUTTON[0])
-                   ram_state <= 2;
-               else
-                   ram_state <= 0;
-               read <= 0;
-            end
-            2: begin
-               data_write <= data_write + 1;
-        //       data_read <= data_read + 1;
-               write <= 1;
-               ram_state <= 3;
-            end
-            3: begin
+            STATE_IDLE: begin
+                ram_state <= STATE_IDLE;
+                read <= 0;
                 write <= 0;
-                ram_state <= 0;
-            end 
+                line_buffer_index <= 0;
+                address <= 0;
+                if(hsync == 0) // at the end of the line
+                    ram_state <= STATE_READ;
+                else if(vga_x == 639 && vga_y == 479) // end of the screen
+                    ram_state <= STATE_WRITE;
+            end
+            STATE_READ: begin
+               line_buffer_index <= line_buffer_index + 1;
+               address = line_buffer_index + vga_y * 40;
+               ram_state <= STATE_READ_WAIT;
+               read <= 1;
+            end
+            STATE_READ_WAIT: begin
+               if(ready)
+                ram_state <= STATE_BUFF_WRITE;
+            end
+            STATE_BUFF_WRITE: begin
+               read <= 0;
+               line_buffer <= {line_buffer[639-16:0], data_read};
+               if(line_buffer_index == 40)
+                    ram_state <= STATE_IDLE;
+               else
+                    ram_state <= STATE_READ;
+            end
+            // should have 1.4ms for this to complete
+            STATE_WRITE: begin
+                write <= 1;
+                address <= address + 1;
+                data_write <= BUTTON[0] ? 16'hffff : 16'h0;
+                ram_state <= STATE_WRITE_WAIT;
+            end
+            STATE_WRITE_WAIT: begin
+                if(ready) begin
+                    if(address > 19200)
+                        ram_state <= STATE_IDLE;
+                    else
+                        ram_state <= STATE_WRITE;
+                end
+            end
+
         endcase
     end
 

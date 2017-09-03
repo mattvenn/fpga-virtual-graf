@@ -34,17 +34,19 @@ Vertical Timing
 `default_nettype none
 module vga (
 	input wire clk,
-    input wire [15:0] line,
+    input wire pixel,
     output reg [2:0] red,
     output reg [2:0] green,
     output reg [2:0] blue,
+    output reg [10:0] hcounter,
+    output reg [9:0] vcounter,
     output reg hsync,
     output reg vsync,
     output reg blank
     );
 
-    reg [10:0] hcounter = 0;
-    reg [9:0] vcounter = 0;
+//    reg [10:0] hcounter = 0;
+//    reg [9:0] vcounter = 0;
 
 	always@(hcounter or vcounter) begin // results in a note about combinatorial logic
         // black everywhere
@@ -77,7 +79,7 @@ module vga (
             green <= 3'b111;
             blue <= 3'b111;
         end
-        if(line[hcounter])  begin
+        if(pixel)  begin
             red <= 3'b111;
             green <= 3'b111;
             blue <= 3'b111;
