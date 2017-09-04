@@ -110,7 +110,7 @@ module top (
     reg [639:0] line_buffer;
 
     wire pixel;
-    assign pixel = line_buffer[vga_x];
+    assign pixel = line_buffer[640-vga_x]; // flip
 
     wire [10:0] hcounter;
     wire [9:0] vcounter;
