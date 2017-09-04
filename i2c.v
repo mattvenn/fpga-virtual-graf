@@ -118,8 +118,8 @@ module top (
     wire [9:0] vga_x;
     wire [8:0] vga_y;
 
-    assign vga_x = hcounter < 640 ? hcounter : 0;
-    assign vga_y = vcounter < 480 ? vcounter : 0;
+    assign vga_x = hcounter <= 640 ? hcounter : 0;
+    assign vga_y = vcounter <= 480 ? vcounter : 0;
 
     reg [5:0] line_buffer_index; // offset into memory for each block of 16 pixels
 
@@ -143,11 +143,11 @@ module top (
                 write <= 0;
                 line_buffer_index <= 0;
                 address <= 0;
-                if(vga_x == 640 && vga_y < 480)     // at the end of the visible line
+                if(hcounter == 640 && vcounter < 480)     // at the end of the visible line
                     ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
-                else if(vga_x == 0 && vga_y == 480) // end of the visible screen
+                else if(hcounter == 0 && vcounter == 480) // end of the visible screen
                     ram_state <= STATE_WRITE;       // write the next camera value to sram
-                else if(vga_x == 0 && vga_y == 481 && ~BUTTON[0]) // end of the visible screen & button
+                else if(hcounter == 0 && vcounter == 481 && ~BUTTON[0]) // end of the visible screen & button
                     ram_state <= STATE_ERASE;       // erase the sram
             end
             STATE_READ: begin
