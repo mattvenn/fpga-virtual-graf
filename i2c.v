@@ -37,7 +37,6 @@ module top (
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
 
     camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
-//    camera cam(.clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
 
    xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
 
@@ -49,7 +48,6 @@ module top (
         .D_OUT_0(i2c_sda_out),
         .D_IN_0(i2c_sda_in),
     );
-
     SB_IO #(
         .PIN_TYPE(6'b 1010_01),
     ) sram_data_pins [15:0] (
@@ -84,13 +82,12 @@ module top (
   wire [2:0] red;
   wire [2:0] green;
   wire [2:0] blue;
-    wire vga_clk;
+  wire vga_clk;
 
     clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
     vga vga_test(.pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
-
 
     assign PMOD[16] = hsync;    // 3
     assign PMOD[17] = vsync;    // 2
@@ -133,6 +130,8 @@ module top (
     localparam STATE_BUFF_WRITE = 3;
     localparam STATE_WRITE = 4;
     localparam STATE_WRITE_WAIT = 5;
+    localparam STATE_ERASE = 6;
+    localparam STATE_ERASE_WAIT = 7;
 
     always @(posedge clk) begin
         
@@ -144,10 +143,12 @@ module top (
                 write <= 0;
                 line_buffer_index <= 0;
                 address <= 0;
-                if(hsync == 0) // at the end of the line
-                    ram_state <= STATE_READ;
-                else if(vga_x == 639 && vga_y == 479) // end of the screen
-                    ram_state <= STATE_WRITE;
+                if(vga_x == 640 && vga_y < 480)     // at the end of the visible line
+                    ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
+                else if(vga_x == 0 && vga_y == 480) // end of the visible screen
+                    ram_state <= STATE_WRITE;       // write the next camera value to sram
+                else if(vga_x == 0 && vga_y == 481 && ~BUTTON[0]) // end of the visible screen & button
+                    ram_state <= STATE_ERASE;       // erase the sram
             end
             STATE_READ: begin
                line_buffer_index <= line_buffer_index + 1;
@@ -170,8 +171,10 @@ module top (
             // should have 1.4ms for this to complete
             STATE_WRITE: begin
                 write <= 1;
-                address <= x / 16 + y * 40;
-                data_write <= 16'h0ff0;
+                // TODO this has to read the page first, then add the pixel to it instead of writing the whole page
+                // divide x by 16 - using a divide broke timing requirements
+                address <= ( x >> 4 ) + y * 40;
+                data_write <= 16'hffff;
                 ram_state <= STATE_WRITE_WAIT;
             end
             STATE_WRITE_WAIT: begin
@@ -179,7 +182,20 @@ module top (
                     ram_state <= STATE_IDLE;
                 end
             end
-
+            STATE_ERASE: begin
+                write <= 1;
+                data_write <= 16'h0000;
+                address <= address + 1;
+                ram_state <= STATE_ERASE_WAIT;
+            end
+            STATE_ERASE_WAIT: begin
+                if(ready) begin
+                    if(address > 19200)
+                        ram_state <= STATE_IDLE;
+                    else
+                        ram_state <= STATE_ERASE;
+                end
+            end
         endcase
     end
 
