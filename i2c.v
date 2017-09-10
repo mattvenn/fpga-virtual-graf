@@ -24,6 +24,7 @@ module top (
     reg deb1;
 	reg [8:0] counter = 0;
 
+    // wiimote camera is 1024 x 768
     reg[9:0] x;
     reg[9:0] y;
 
@@ -97,6 +98,7 @@ module top (
 
     reg [17:0] address;
     wire [15:0] data_read;
+    reg [15:0] last_read;
     reg [15:0] data_write;
     reg read;
     reg write;
@@ -110,7 +112,7 @@ module top (
     reg [639:0] line_buffer;
 
     wire pixel;
-    assign pixel = line_buffer[640-vga_x]; // flip
+    assign pixel = line_buffer[640 - vga_x]; // flip it as line buffer is read in backwards
 
     wire [10:0] hcounter;
     wire [9:0] vcounter;
@@ -128,10 +130,12 @@ module top (
     localparam STATE_READ = 1;
     localparam STATE_READ_WAIT = 2;
     localparam STATE_BUFF_WRITE = 3;
-    localparam STATE_WRITE = 4;
-    localparam STATE_WRITE_WAIT = 5;
-    localparam STATE_ERASE = 6;
-    localparam STATE_ERASE_WAIT = 7;
+    localparam STATE_CAM_READ = 4;
+    localparam STATE_CAM_READ_WAIT = 5;
+    localparam STATE_CAM_WRITE = 6;
+    localparam STATE_CAM_WRITE_WAIT = 7;
+    localparam STATE_ERASE= 8;
+    localparam STATE_ERASE_WAIT = 9;
 
     always @(posedge clk) begin
         
@@ -146,7 +150,7 @@ module top (
                 if(hcounter == 640 && vcounter < 480)     // at the end of the visible line
                     ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
                 else if(hcounter == 0 && vcounter == 480) // end of the visible screen
-                    ram_state <= STATE_WRITE;       // write the next camera value to sram
+                    ram_state <= STATE_CAM_READ;       // write the next camera value to sram
                 else if(hcounter == 0 && vcounter == 481 && ~BUTTON[0]) // end of the visible screen & button
                     ram_state <= STATE_ERASE;       // erase the sram
             end
@@ -169,16 +173,28 @@ module top (
                     ram_state <= STATE_READ;
             end
             // should have 1.4ms for this to complete
-            STATE_WRITE: begin
+            STATE_CAM_READ: begin
+                address <= ( x >> 4 ) + y * 40;
+                read <= 1;
+                ram_state <= STATE_CAM_READ_WAIT;
+            end
+            STATE_CAM_READ_WAIT: begin
+               if(ready) begin
+                    ram_state <= STATE_CAM_WRITE;
+                    last_read <= data_read;
+                    read <= 0;
+                end
+            end
+            STATE_CAM_WRITE: begin
                 write <= 1;
                 // TODO this has to read the page first, then add the pixel to it instead of writing the whole page
                 // divide x by 16 - using a divide broke timing requirements
-                address <= ( x >> 4 ) + y * 40;
-                data_write <= 16'hffff;
-                ram_state <= STATE_WRITE_WAIT;
+                data_write <= last_read | (x - 16 * (x >> 4));
+                ram_state <= STATE_CAM_WRITE_WAIT;
             end
-            STATE_WRITE_WAIT: begin
+            STATE_CAM_WRITE_WAIT: begin
                 if(ready) begin
+                    write <= 0;
                     ram_state <= STATE_IDLE;
                 end
             end
