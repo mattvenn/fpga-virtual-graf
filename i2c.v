@@ -1,4 +1,9 @@
 `default_nettype none
+`define video
+`define camera
+`define xyleds
+`define sram
+
 module top (
 	input  clk,
 	output [0:3] LED,
@@ -8,15 +13,21 @@ module top (
     inout i2c_sda,
     output i2c_scl,
     output i2c_sda_dir,
-    input button,
+    `ifdef sram
     output [17:0] ADR,
     inout [15:0] DAT,
     output RAMOE,
     output RAMWE,
     output RAMCS,
+    `endif
     output [31:0] PMOD
 );
     
+    // synchronous reset button
+    always @(posedge clk) begin
+        // button normally high, press makes line go low
+        reset <= ~BUTTON[1];
+    end
 
     reg cam_clk;
     reg i2c_start = 1;
@@ -28,7 +39,7 @@ module top (
     reg[9:0] x;
     reg[9:0] y;
 
-    wire reset = 0;
+    wire reset;
     assign pixart_reset = 1;
     assign pixartclk = vga_clk;
 
@@ -37,9 +48,13 @@ module top (
 
     clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
 
+   `ifdef camera
     camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+    `endif
 
-   xy_leds leds(.x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+   `ifdef xyleds
+   xy_leds leds(.reset(reset), .x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
+   `endif
 
     SB_IO #(
          .PIN_TYPE(6'b 1010_01),
@@ -49,6 +64,7 @@ module top (
         .D_OUT_0(i2c_sda_out),
         .D_IN_0(i2c_sda_in),
     );
+    `ifdef sram
     SB_IO #(
         .PIN_TYPE(6'b 1010_01),
     ) sram_data_pins [15:0] (
@@ -57,10 +73,12 @@ module top (
         .D_OUT_0(data_pins_out),
         .D_IN_0(data_pins_in),
     );
+    `endif
 
     //PLL details http://www.latticesemi.com/view_document?document_id=47778
     //vga clock freq is 25.2MHz (see vga.v)
     //need 5 times this for dvi output = 126MHz, so this PLL input is 100MHz (blackice clock), output is 126MHz.
+    `ifdef video
     SB_PLL40_CORE #(
         .FEEDBACK_PATH("SIMPLE"),
         .PLLOUT_SELECT("GENCLK"),
@@ -75,6 +93,7 @@ module top (
         .REFERENCECLK(clk),
         .PLLOUTCORE(clkx5)
     );
+    `endif
 
   wire clkx5;
   wire hsync;
@@ -85,6 +104,7 @@ module top (
   wire [2:0] blue;
   wire vga_clk;
 
+    `ifdef video
     clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
     vga vga_test(.pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
@@ -94,8 +114,9 @@ module top (
     assign PMOD[17] = vsync;    // 2
     assign PMOD[18] = blank;    // 1
     assign PMOD[19] = vga_clk;  // 0
+    `endif
     
-
+    `ifdef sram
     reg [17:0] address;
     wire [15:0] data_read;
     reg [15:0] last_read;
@@ -137,8 +158,12 @@ module top (
     localparam STATE_ERASE= 8;
     localparam STATE_ERASE_WAIT = 9;
 
+
     always @(posedge clk) begin
-        
+        if( reset == 1 ) begin
+            ram_state <= STATE_IDLE;
+        end
+        else begin
         // fill up the bram from the sram at the end of the line
         case(ram_state)
             STATE_IDLE: begin
@@ -213,6 +238,7 @@ module top (
                 end
             end
         endcase
+        end
     end
 
     sram sram_test(.clk(clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), 
@@ -222,5 +248,5 @@ module top (
         .address_pins(ADR), 
         .OE(RAMOE), .WE(RAMWE), .CS(RAMCS)
         );
-
+    `endif
 endmodule

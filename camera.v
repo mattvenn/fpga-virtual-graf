@@ -49,6 +49,10 @@ module camera(
     i2c_master i2c(.i2c_sda_dir(i2c_sda_dir), .clk (clk),  .addr(i2c_addr), .data(i2c_data), .reset (reset), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_sda_in(i2c_sda_in), .i2c_scl(i2c_scl), .data_out(i2c_data_in), .packets(packets), .data_ready(data_ready), .data_req(data_req));
 
     always@(posedge clk) begin
+        if( reset == 1 ) begin
+            state <= STATE_START;
+        end
+        else begin
         case(state)
             STATE_START: begin
                 if(i2c_ready && start) begin
@@ -127,6 +131,7 @@ module camera(
                     state <= STATE_REQ_DATA_1;
             end
         endcase
+        end
     end
 endmodule
 
