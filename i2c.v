@@ -158,6 +158,10 @@ module top (
     localparam STATE_ERASE= 8;
     localparam STATE_ERASE_WAIT = 9;
 
+    assign PMOD[20] = ram_state == STATE_READ ? 1 : 0;    // 7
+    assign PMOD[21] = ram_state == STATE_IDLE ? 1 : 0;    // 6
+    assign PMOD[22] = ram_state == STATE_CAM_WRITE ? 1 : 0;    // 5
+    assign PMOD[23] = ram_state == STATE_BUFF_WRITE ;  // 4
 
     always @(posedge clk) begin
         if( reset == 1 ) begin
@@ -175,7 +179,7 @@ module top (
                 if(hcounter == 640 && vcounter < 480)     // at the end of the visible line
                     ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
                 else if(hcounter == 0 && vcounter == 480) // end of the visible screen
-                    ram_state <= STATE_CAM_READ;       // write the next camera value to sram
+                    ram_state <= STATE_CAM_WRITE;       // write the next camera value to sram
                 else if(hcounter == 0 && vcounter == 481 && ~BUTTON[0]) // end of the visible screen & button
                     ram_state <= STATE_ERASE;       // erase the sram
             end
@@ -198,10 +202,12 @@ module top (
                     ram_state <= STATE_READ;
             end
             // should have 1.4ms for this to complete
+            /*
             STATE_CAM_READ: begin
                 address <= ( x >> 4 ) + y * 40;
                 read <= 1;
                 ram_state <= STATE_CAM_READ_WAIT;
+                ram_state <= STATE_CAM_WRITE;
             end
             STATE_CAM_READ_WAIT: begin
                if(ready) begin
@@ -210,16 +216,19 @@ module top (
                     read <= 0;
                 end
             end
+            */
             STATE_CAM_WRITE: begin
                 write <= 1;
                 // TODO this has to read the page first, then add the pixel to it instead of writing the whole page
                 // divide x by 16 - using a divide broke timing requirements
-                data_write <= last_read | (x - 16 * (x >> 4));
+                //data_write <= last_read | (x - 16 * (x >> 4));
+                address <= ( x >> 4 ) + y * 40;
+                data_write <= 16'hffff;
                 ram_state <= STATE_CAM_WRITE_WAIT;
             end
             STATE_CAM_WRITE_WAIT: begin
                 if(ready) begin
-                    write <= 0;
+                    //write <= 0;
                     ram_state <= STATE_IDLE;
                 end
             end
