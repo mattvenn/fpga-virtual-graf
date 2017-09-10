@@ -1,4 +1,8 @@
 /* probably needs to use a loop in the state to deal with all the config (6 paris of bytes)
+
+camera is 1024 x 768
+details on camera data format: http://wiibrew.org/wiki/Wiimote#Data_Formats
+
 */
 `default_nettype none
 module camera(
