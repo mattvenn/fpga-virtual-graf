@@ -65,6 +65,7 @@ module sram (
         if( reset == 1 ) begin
             state <= STATE_IDLE;
             output_enable <= 1;
+            data_read_reg <= 0;
             chip_select <= 1;
             write_enable <= 1;
         end
