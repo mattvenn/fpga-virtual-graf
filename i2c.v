@@ -2,7 +2,8 @@
 `define video
 `define camera
 `define xyleds
-//`define sram
+`define sram
+`define dvid
 
 module top (
 	input  clk,
@@ -46,7 +47,7 @@ module top (
     wire i2c_sda_out;
     wire i2c_sda_in;
 
-    clk_divn #(.WIDTH(16), .N(500)) clockdiv_cam(.clk(clk), .clk_out(cam_clk));
+    divM #(.M(500)) clockdiv_cam(.clk_in(clk), .clk_out(cam_clk));
 
    `ifdef camera
     camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
@@ -105,7 +106,7 @@ module top (
   wire vga_clk;
 
     `ifdef video
-    clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
+    divM #(.M(5)) clockdiv(.clk_in(clkx5), .clk_out(vga_clk));
     vga vga_test(.reset(reset), .pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
@@ -147,25 +148,27 @@ module top (
 
     reg [5:0] line_buffer_index; // offset into memory for each block of 16 pixels
 
-    // SRAM buffer state machine
-    localparam STATE_IDLE = 0;
-    localparam STATE_READ = 1;
-    localparam STATE_READ_WAIT = 2;
-    localparam STATE_BUFF_WRITE = 3;
-    localparam STATE_CAM_READ = 4;
-    localparam STATE_CAM_READ_WAIT = 5;
-    localparam STATE_CAM_WRITE = 6;
-    localparam STATE_CAM_WRITE_WAIT = 7;
-    localparam STATE_ERASE= 8;
-    localparam STATE_ERASE_WAIT = 9;
-
-    assign PMOD[20] = ram_state == STATE_READ ? 1 : 0;    // 4      7
-    assign PMOD[21] = ram_state == STATE_IDLE ? 1 : 0;    // 5      6
-    assign PMOD[22] = ram_state == STATE_CAM_WRITE ? 1 : 0; // 6    5
-    assign PMOD[23] = ram_state == STATE_BUFF_WRITE ;  // 7         4
+    // SRAM buffer state machine            // 654 on the pmod tek adapter
+    localparam STATE_IDLE = 0;              // 000
+    localparam STATE_READ = 1;              // 001
+    localparam STATE_READ_WAIT = 2;         // 010
+    localparam STATE_BUFF_WRITE = 3;        // 011
+    localparam STATE_CAM_READ = 4;          // 100
+    localparam STATE_CAM_READ_WAIT = 5;     // 101
+    localparam STATE_CAM_WRITE = 6;         // 110
+    localparam STATE_CAM_WRITE_WAIT = 7;    // 111
+    localparam STATE_ERASE= 8;              // 000
+    localparam STATE_ERASE_WAIT = 9;        // 001
 
     /*
-    always @(posedge clk) begin
+    assign PMOD[20] = ram_state == STATE_READ ? 1 : 0;      // 7 output on the scope
+    assign PMOD[21] = ram_state == STATE_IDLE ? 1 : 0;      // 6
+    assign PMOD[22] = ram_state == STATE_CAM_WRITE ? 1 : 0; // 5
+    assign PMOD[23] = ram_state == STATE_BUFF_WRITE ? 1 : 0;// 4
+    */
+    assign PMOD[23:21] = ram_state;
+
+    always @(posedge vga_clk) begin
         if( reset == 1 ) begin
             ram_state <= STATE_IDLE;
         end
@@ -250,7 +253,7 @@ module top (
         endcase
         end
     end
-    */
+
     sram sram_test(.clk(clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), 
         .data_pins_in(data_pins_in), 
         .data_pins_out(data_pins_out), 
