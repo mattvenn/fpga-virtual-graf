@@ -7,11 +7,16 @@ a problem with the blackice board is that the PLL lines interfere with the SRAM 
 https://github.com/cseed/arachne-pnr/issues/64#issuecomment-310877601
 
 hence reading/writing to data[13] will not work.
+
+Also thanks to David on the mystorm forum:
+https://forum.mystorm.uk/t/fpga-unreliability-crashing-hanging/252/6?u=mattvenn
+
 */
 `default_nettype none
 module sram (
     input wire reset,
-    // 50ns max for data read/write. at 12MHz, each clock cycle is 83ns, so write in 1 cycle
+    // 50ns max for data read/write.
+    // scope shows it's about 35ns. At 100MHz, each clock cycle is 10ns, so write in 4 cycles
 	input wire clk,
     input wire write,
     input wire read,
@@ -19,7 +24,7 @@ module sram (
     output wire [15:0] data_read,       // the data that's been read
     input wire [17:0] address,          // address to write to
     output wire ready,                  // high when ready for next operation
-    output wire data_pins_out_en,       // when to switch between in and out on data pins
+    output reg data_pins_out_en,       // when to switch between in and out on data pins
 
     // SRAM pins
     output wire [17:0] address_pins,    // address pins of the SRAM
@@ -44,7 +49,7 @@ module sram (
     reg [15:0] data_read_reg;
     reg [15:0] data_write_reg;
 
-    assign data_pins_out_en = (state == STATE_WRITE) ? 1 : 0; // turn on output pins when writing data
+    //assign data_pins_out_en = (state == STATE_WRITE) ? 1 : 0; // turn on output pins when writing data
     assign address_pins = address;
     assign data_pins_out = data_write_reg;
     assign data_read = data_read_reg;
@@ -59,6 +64,7 @@ module sram (
         output_enable <= 1;
         chip_select <= 1;
         write_enable <= 1;
+        data_pins_out_en <= 0;
     end
 
 	always@(posedge clk) begin
@@ -74,17 +80,19 @@ module sram (
                 STATE_IDLE: begin
                     output_enable <= 1;
                     chip_select <= 1;
-                    write_enable <= 1;
                     if(write) state <= STATE_WRITE_SETUP;
                     else if(read) state <= STATE_READ_SETUP;
                 end
                 STATE_WRITE_SETUP: begin
                     chip_select <= 0;
+                    data_pins_out_en <= 1;
+                    write_enable <= 0;
                     data_write_reg <= data_write;
                     state <= STATE_WRITE;
                 end
                 STATE_WRITE: begin
-                    write_enable <= 0;
+                    write_enable <= 1; // write happens on rising edge of WE
+                    data_pins_out_en <= 0;
                     state <= STATE_IDLE;
                 end
                 STATE_READ_SETUP: begin
