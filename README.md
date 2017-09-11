@@ -12,6 +12,10 @@ my first 'proper' FPGA project.
 
 * wiimote camera on branch wii-pcb is working
 * on branch sram-video-test, i2c data not seen to be working
+* sometimes i2c clock line is not a square but very short pulses (maybe a problem with tristate?)
+* tried clock enable on i2c (on separate branch), but slowed down timing estimate
+* sometimes when video doesn't work, the syncs and blanks are twice as short as
+ they should be...
 * sram-video-test branch has commit that shows working sram video buffer
 
 # Wiimote Camera
