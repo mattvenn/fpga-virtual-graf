@@ -27,6 +27,11 @@ debug-vga:
 	vvp vga -fst
 	gtkwave test.vcd gtk-vga.gtkw
 
+debug-vga-sram:
+	iverilog -o vga-sram sram_vga_tb.v sram.v vga.v
+	vvp vga-sram -fst
+	gtkwave test.vcd gtk-vga-sram.gtkw
+
 debug-i2c:
 	iverilog -o i2c i2c_tb.v camera.v i2c_master.v button.v xy_leds.v
 	vvp i2c -fst
