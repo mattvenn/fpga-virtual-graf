@@ -34,6 +34,7 @@ Vertical Timing
 `default_nettype none
 module vga (
 	input wire clk,
+    input wire reset,
     input wire pixel,
     output reg [2:0] red,
     output reg [2:0] green,
@@ -89,7 +90,10 @@ module vga (
 
     // increment counters and wrap them
     always@(posedge clk) begin
-        if(hcounter == 799) begin
+        if(reset == 1) begin
+            hcounter <= 0;
+            vcounter <= 0;
+        end else if(hcounter == 799) begin
             hcounter <= 0;
             if(vcounter == 524) begin
                 vcounter <= 0;
