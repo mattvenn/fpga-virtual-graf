@@ -22,6 +22,11 @@ all: $(PROJ).bin $(PROJ).rpt
 %.rpt: %.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
+debug-vga:
+	iverilog -o vga vga_tb.v vga.v
+	vvp vga -fst
+	gtkwave test.vcd gtk-vga.gtkw
+
 debug-i2c:
 	iverilog -o i2c i2c_tb.v camera.v i2c_master.v button.v xy_leds.v
 	vvp i2c -fst

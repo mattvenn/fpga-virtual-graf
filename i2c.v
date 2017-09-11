@@ -2,7 +2,7 @@
 `define video
 `define camera
 `define xyleds
-`define sram
+//`define sram
 
 module top (
 	input  clk,
@@ -106,16 +106,20 @@ module top (
 
     `ifdef video
     clk_divn clockdiv(.clk(clkx5), .clk_out(vga_clk));
-    vga vga_test(.pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
+    vga vga_test(.reset(reset), .pixel(pixel), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
 
-    assign PMOD[16] = hsync;    // 3
-    assign PMOD[17] = vsync;    // 2
-    assign PMOD[18] = blank;    // 1
-    assign PMOD[19] = vga_clk;  // 0
+    assign PMOD[16] = hsync;    // 0
+    assign PMOD[17] = vsync;    // 1
+    assign PMOD[18] = blank;    // 2
+    assign PMOD[19] = vga_clk;  // 3
     `endif
     
+    wire pixel;
+    wire [10:0] hcounter;
+    wire [9:0] vcounter;
+
     `ifdef sram
     reg [17:0] address;
     wire [15:0] data_read;
@@ -132,11 +136,8 @@ module top (
     reg [3:0] ram_state = 0;
     reg [639:0] line_buffer;
 
-    wire pixel;
     assign pixel = line_buffer[640 - vga_x]; // flip it as line buffer is read in backwards
 
-    wire [10:0] hcounter;
-    wire [9:0] vcounter;
 
     wire [9:0] vga_x;
     wire [8:0] vga_y;
@@ -158,11 +159,12 @@ module top (
     localparam STATE_ERASE= 8;
     localparam STATE_ERASE_WAIT = 9;
 
-    assign PMOD[20] = ram_state == STATE_READ ? 1 : 0;    // 7
-    assign PMOD[21] = ram_state == STATE_IDLE ? 1 : 0;    // 6
-    assign PMOD[22] = ram_state == STATE_CAM_WRITE ? 1 : 0;    // 5
-    assign PMOD[23] = ram_state == STATE_BUFF_WRITE ;  // 4
+    assign PMOD[20] = ram_state == STATE_READ ? 1 : 0;    // 4      7
+    assign PMOD[21] = ram_state == STATE_IDLE ? 1 : 0;    // 5      6
+    assign PMOD[22] = ram_state == STATE_CAM_WRITE ? 1 : 0; // 6    5
+    assign PMOD[23] = ram_state == STATE_BUFF_WRITE ;  // 7         4
 
+    /*
     always @(posedge clk) begin
         if( reset == 1 ) begin
             ram_state <= STATE_IDLE;
@@ -183,6 +185,7 @@ module top (
                 else if(hcounter == 0 && vcounter == 481 && ~BUTTON[0]) // end of the visible screen & button
                     ram_state <= STATE_ERASE;       // erase the sram
             end
+            // reading into buffer takes 2.5us
             STATE_READ: begin
                line_buffer_index <= line_buffer_index + 1;
                address = line_buffer_index + vga_y * 40;
@@ -202,7 +205,6 @@ module top (
                     ram_state <= STATE_READ;
             end
             // should have 1.4ms for this to complete
-            /*
             STATE_CAM_READ: begin
                 address <= ( x >> 4 ) + y * 40;
                 read <= 1;
@@ -216,7 +218,6 @@ module top (
                     read <= 0;
                 end
             end
-            */
             STATE_CAM_WRITE: begin
                 write <= 1;
                 // TODO this has to read the page first, then add the pixel to it instead of writing the whole page
@@ -249,7 +250,7 @@ module top (
         endcase
         end
     end
-
+    */
     sram sram_test(.clk(clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), 
         .data_pins_in(data_pins_in), 
         .data_pins_out(data_pins_out), 
