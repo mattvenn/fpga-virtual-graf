@@ -22,6 +22,11 @@ all: $(PROJ).bin $(PROJ).rpt
 %.rpt: %.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
+debug-clockdiv:
+	iverilog -o clock clockdiv_tb.v clockdiv.v
+	vvp clock -fst
+	gtkwave test.vcd gtk-clock.gtkw
+
 debug-vga:
 	iverilog -o vga vga_tb.v vga.v
 	vvp vga -fst

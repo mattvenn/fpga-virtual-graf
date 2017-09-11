@@ -1,27 +1,24 @@
-module clk_divn #(
-parameter WIDTH = 3,
-parameter N = 5)
- 
-(clk,reset, clk_out);
- 
-input clk;
-input reset;
-output clk_out;
- 
-reg [WIDTH-1:0] pos_count, neg_count;
-wire [WIDTH-1:0] r_nxt;
- 
- always @(posedge clk)
- if (reset)
- pos_count <=0;
- else if (pos_count ==N-1) pos_count <= 0;
- else pos_count<= pos_count +1;
- 
- always @(negedge clk)
- if (reset)
- neg_count <=0;
- else  if (neg_count ==N-1) neg_count <= 0;
- else neg_count<= neg_count +1; 
- 
-assign clk_out = ((pos_count > (N>>1)) | (neg_count > (N>>1))); 
+//- divM.v
+//With thanks to Obijuan
+//https://github.com/Obijuan/open-fpga-verilog-tutorial/wiki/Cap%C3%ADtulo-15%3A-Divisor-de-frecuencias
+module divM(input wire clk_in, output wire clk_out);
+    
+// default clock divider
+parameter M = 5;
+    
+// number of bits necessary to count up to the divider
+localparam N = $clog2(M);
+    
+reg [N-1:0] divcounter = 0;
+    
+//-- Contador módulo M
+always @(posedge clk_in)
+  if (divcounter == M - 1) 
+    divcounter <= 0;
+  else 
+    divcounter <= divcounter + 1;
+    
+//clock goes high when MSB is high
+assign clk_out = divcounter[N-1];
+    
 endmodule
