@@ -111,7 +111,7 @@ module top (
 
     `ifdef video
     divM #(.M(5)) clockdiv(.clk_in(clkx5), .clk_out(vga_clk));
-    wire [15:0] pixel_buf;
+    wire [7:0] pixel_buf;
     vga vga_test(.reset(reset), .pixel_buf(pixel_buf), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));

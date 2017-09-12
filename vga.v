@@ -35,7 +35,7 @@ Vertical Timing
 module vga (
 	input wire clk,
     input wire reset,
-    input wire [15:0] pixel_buf,
+    input wire [7:0] pixel_buf,
     output reg [2:0] red,
     output reg [2:0] green,
     output reg [2:0] blue,

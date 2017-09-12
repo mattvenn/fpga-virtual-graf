@@ -14,7 +14,7 @@ module pixel_buffer(
     input wire [9:0] x,
     input wire [9:0] y,
 
-    output reg [15:0] pixel_buf,
+    output reg [7:0] pixel_buf,
     input wire [10:0] hcounter,
     input wire [9:0] vcounter,
     output reg [3:0] ram_state
@@ -50,7 +50,7 @@ module pixel_buffer(
                 if(hcounter == 0)
                     line_buffer_index <= 0;
                     
-                if(hcounter[3:0] == 4'b0000 && vcounter < 480 && hcounter < 640)     // at the end of the visible line
+                if(hcounter[2:0] == 4'b000 && vcounter < 480 && hcounter < 640)     // at the end of the visible line
                     ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
                 else if(hcounter == 0 && vcounter == 480) // end of the visible screen
                     ram_state <= STATE_CAM_WRITE;       // write the next camera value to sram
@@ -61,7 +61,7 @@ module pixel_buffer(
             STATE_READ: begin
                if(ready) begin
                    line_buffer_index <= line_buffer_index + 1;
-                   address <= line_buffer_index + vcounter * 40;
+                   address <= line_buffer_index + vcounter * 80;
                    ram_state <= STATE_READ_WAIT;
                end
             end
@@ -71,7 +71,7 @@ module pixel_buffer(
             end
             STATE_BUFF_WRITE: begin
                read <= 0;
-               pixel_buf <= data_read;
+               pixel_buf <= data_read[7:0]; // just lower byte
                ram_state <= STATE_IDLE;
             end
             /*
@@ -93,7 +93,7 @@ module pixel_buffer(
             STATE_CAM_WRITE: begin
                 if(ready) begin
                     ram_state <= STATE_CAM_WRITE_WAIT;
-                    address <= ( x >> 4 ) + y * 40;
+                    address <= ( x >> 3 ) + y * 80;
                     data_write <= 16'hffff;
                     write <= 1;
                 end
@@ -115,7 +115,7 @@ module pixel_buffer(
             end
             STATE_ERASE_WAIT: begin
                 write <= 0;
-                if(address > 19200)
+                if(address > 38400)
                     ram_state <= STATE_IDLE;
                 else
                     ram_state <= STATE_ERASE;
