@@ -8,21 +8,25 @@ my first 'proper' FPGA project.
 * icestorm free fpga tools.
 * gtkwave for debugging.
 
-# Integration notes
+# Things to do
 
-* wiimote camera on branch wii-pcb is working
-* on branch sram-video-test, i2c data not seen to be working
-* sometimes i2c clock line is not a square but very short pulses
 * tried clock enable on i2c (on separate branch), but slowed down timing estimate
-* sometimes when video doesn't work, the syncs and blanks are twice as short as
- they should be...
-* sram-video-test branch has commit that shows working sram video buffer
+* default cases for state machines
+
+# SRAM video buffer
+
+Using the SRAM on the back of the board for persistant graffitis. This caused 2
+major issues:
+
+* [PLL and SRAM pins collide on the board layout](https://forum.mystorm.uk/t/placement-conflict-between-sb-io-for-ram-and-pll/224/12)
+* [switching the SB_IO pins and SRAM pins at the same time](https://forum.mystorm.uk/t/fpga-unreliability-crashing-hanging/252/19) caused instability.
 
 # Wiimote Camera
 
 * (breakout board)[https://github.com/mattvenn/kicad/tree/master/wiimote-fpga)
 * 25mhz supplied on clock pin
 * reset high to run
+* wiimote camera PCB was tested with branch wii-pcb
 
 # I2C reader / writer
 
