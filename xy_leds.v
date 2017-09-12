@@ -24,9 +24,9 @@ module xy_leds(
     */
 
     assign LED1 = (x < MID_X ) ? data_ok : 0;
-    assign LED3 = (x > MID_X ) ? data_ok : 0;
+    assign LED2 = (x > MID_X ) ? data_ok : 0;
 
-    assign LED4 = (y > MID_Y ) ? data_ok : 0;
-    assign LED2 = (y < MID_Y ) ? data_ok : 0;
+    assign LED3 = (y > MID_Y ) ? data_ok : 0;
+    assign LED4 = (y < MID_Y ) ? data_ok : 0;
 
 endmodule

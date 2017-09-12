@@ -35,7 +35,7 @@ Vertical Timing
 module vga (
 	input wire clk,
     input wire reset,
-    input wire pixel,
+    input wire [15:0] pixel_buf,
     output reg [2:0] red,
     output reg [2:0] green,
     output reg [2:0] blue,
@@ -80,7 +80,7 @@ module vga (
             green <= 3'b111;
             blue <= 3'b111;
         end
-        if(pixel)  begin
+        if(pixel_buf[hcounter])  begin
             red <= 3'b111;
             green <= 3'b111;
             blue <= 3'b111;

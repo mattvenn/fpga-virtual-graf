@@ -30,79 +30,98 @@ module sram (
     output wire [17:0] address_pins,    // address pins of the SRAM
     input  wire [15:0] data_pins_in,
     output wire [15:0] data_pins_out,
-    output wire OE,                     // output enable - low to enable
-    output wire WE,                     // write enable - low to enable
-    output wire CS                      // chip select - low to enable
+    output wire OE,                     // ~output enable - low to enable
+    output wire WE,                     // ~write enable - low to enable
+    output wire CS                      // ~chip select - low to enable
 );
 
     localparam STATE_IDLE = 0;
-    localparam STATE_WRITE = 1;
-    localparam STATE_WRITE_SETUP = 4;
-    localparam STATE_READ_SETUP = 2;
-    localparam STATE_READ = 3;
+    localparam STATE_WRITE_SETUP = 1;
+    localparam STATE_WRITE = 2;
+    localparam STATE_WRITE_WAIT = 3;
+    localparam STATE_READ_SETUP = 4;
+    localparam STATE_READ = 5;
+    localparam STATE_READ_WAIT = 6;
 
     reg output_enable;
     reg write_enable;
     reg chip_select;
 
-    reg [4:0] state;
+    reg [1:0] wait_count;
+    reg [2:0] state;
     reg [15:0] data_read_reg;
     reg [15:0] data_write_reg;
+    reg [17:0] address_reg;
 
-    //assign data_pins_out_en = (state == STATE_WRITE) ? 1 : 0; // turn on output pins when writing data
-    assign address_pins = address;
+    assign address_pins = address_reg;
     assign data_pins_out = data_write_reg;
     assign data_read = data_read_reg;
-    assign OE = output_enable;
-    assign WE = write_enable;
-    assign CS = chip_select;
+    assign OE = !output_enable;
+    assign WE = !write_enable;
+    assign CS = !chip_select;
 
     assign ready = (!reset && state == STATE_IDLE) ? 1 : 0; 
 
     initial begin
         state <= STATE_IDLE;
-        output_enable <= 1;
-        chip_select <= 1;
-        write_enable <= 1;
+        output_enable <= 0;
+        chip_select <= 0;
+        write_enable <= 0;
         data_pins_out_en <= 0;
     end
 
 	always@(posedge clk) begin
         if( reset == 1 ) begin
             state <= STATE_IDLE;
-            output_enable <= 1;
+            output_enable <= 0;
             data_read_reg <= 0;
-            chip_select <= 1;
-            write_enable <= 1;
+            chip_select <= 0;
+            write_enable <= 0;
         end
         else begin
             case(state)
                 STATE_IDLE: begin
-                    output_enable <= 1;
-                    chip_select <= 1;
+                    write_enable <= 0;
+                    output_enable <= 0;
+                    chip_select <= 0;
+                    data_pins_out_en <= 0;
+                    wait_count <= 0;
+
                     if(write) state <= STATE_WRITE_SETUP;
                     else if(read) state <= STATE_READ_SETUP;
                 end
+
                 STATE_WRITE_SETUP: begin
-                    chip_select <= 0;
-                    data_pins_out_en <= 1;
-                    write_enable <= 0;
-                    data_write_reg <= data_write;
-                    state <= STATE_WRITE;
+                    chip_select <= 1;               // select chip
+                    address_reg <= address;
+                    data_pins_out_en <= 1;          // turn data pins into output
+                    data_write_reg <= data_write;   // put the data on the pins
+                    state <= STATE_WRITE;           // next state...
                 end
                 STATE_WRITE: begin
-                    write_enable <= 1; // write happens on rising edge of WE
-                    data_pins_out_en <= 0;
-                    state <= STATE_IDLE;
+                    write_enable <= 1;              // write happens on rising edge of write (falling of !WE)
+                    state <= STATE_WRITE_WAIT;      // next state...
                 end
+                STATE_WRITE_WAIT: begin
+                    wait_count <= wait_count + 1;   // sram takes a moment
+                    if(wait_count == 1) 
+                        state <= STATE_IDLE;        // next state...
+                end
+
                 STATE_READ_SETUP: begin
-                    output_enable <= 0;
-                    chip_select <= 0;
-                    state <= STATE_READ;
+                    output_enable <= 1;             // turn on ram chip's outputs
+                    address_reg <= address;
+                    chip_select <= 1;               // select chip
+                    state <= STATE_READ_WAIT;       // next state...
+                end
+                STATE_READ_WAIT: begin
+                    wait_count <= wait_count + 1;   // wait for data to settle
+                    if(wait_count == 1)
+                        state <= STATE_READ;        // next state...
                 end
                 STATE_READ: begin
-                    data_read_reg <= data_pins_in;
-                    state <= STATE_IDLE;
+                    data_read_reg <= data_pins_in;  // put the data on the reg
+                    state <= STATE_IDLE;            // next state...
                 end
             endcase
         end
