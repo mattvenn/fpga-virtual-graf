@@ -1,7 +1,7 @@
 `default_nettype none
 `define video
 `define camera
-`define xyleds
+//`define xyleds
 `define sram
 
 module top (
@@ -27,13 +27,17 @@ module top (
     always @(posedge clk) begin
         // button normally high, press makes line go low
         reset <= ~BUTTON[1];
+        led_counter <= led_counter + 1;
     end
+
+    assign LED[0] = reset;
+    // y is 1023 if no blob found
+    assign LED[1] = (y < 1023) ? 1 : 0;
+    assign LED[2] = led_counter[26];
+    reg [26:0] led_counter;
 
     reg cam_clk;
     reg i2c_start = 1;
-    wire debounced;
-    reg deb1;
-	reg [8:0] counter = 0;
 
     // wiimote camera is 1024 x 768
     reg[9:0] x;
@@ -51,6 +55,7 @@ module top (
    `ifdef camera
     camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
     `endif
+
 
    `ifdef xyleds
    xy_leds leds(.reset(reset), .x(x), .y(y), .LED1(LED[0]), .LED2(LED[1]),.LED3(LED[2]),.LED4(LED[3]));
@@ -141,7 +146,7 @@ module top (
         .OE(RAMOE), .WE(RAMWE), .CS(RAMCS)
         );
     
-    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixel_buf(pixel_buf), .hcounter(hcounter), .vcounter(vcounter));
+    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixel_buf(pixel_buf), .hcounter(hcounter), .vcounter(vcounter), .x(x), .y(y));
     `endif
 endmodule
     

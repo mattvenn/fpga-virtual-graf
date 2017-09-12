@@ -73,7 +73,7 @@ module sram (
 	always@(posedge clk) begin
         if( reset == 1 ) begin
             state <= STATE_IDLE;
-            output_enable <= 0;
+            output_enable <= 1;
             data_read_reg <= 0;
             chip_select <= 0;
             write_enable <= 0;
@@ -82,7 +82,7 @@ module sram (
             case(state)
                 STATE_IDLE: begin
                     write_enable <= 0;
-                    output_enable <= 0;
+                    output_enable <= 1;
                     chip_select <= 0;
                     data_pins_out_en <= 0;
                     wait_count <= 0;
@@ -94,18 +94,20 @@ module sram (
                 STATE_WRITE_SETUP: begin
                     chip_select <= 1;               // select chip
                     address_reg <= address;
-                    data_pins_out_en <= 1;          // turn data pins into output
+                    write_enable <= 1;              // 
                     data_write_reg <= data_write;   // put the data on the pins
                     state <= STATE_WRITE;           // next state...
                 end
                 STATE_WRITE: begin
-                    write_enable <= 1;              // write happens on rising edge of write (falling of !WE)
+                    data_pins_out_en <= 1;          // turn data pins into output AFTER write_enable disables outputs
                     state <= STATE_WRITE_WAIT;      // next state...
                 end
                 STATE_WRITE_WAIT: begin
                     wait_count <= wait_count + 1;   // sram takes a moment
-                    if(wait_count == 1) 
+                    if(wait_count == 1) begin
+                        write_enable <= 0;          // write happens on falling edge of write (rising of !WE)
                         state <= STATE_IDLE;        // next state...
+                    end
                 end
 
                 STATE_READ_SETUP: begin
