@@ -10,7 +10,6 @@ module test;
   reg [15:0] data_write;
   output [15:0] data_pins_out;
   input [15:0] data_pins_in;
-  wire data_pins_out_en;
 
   wire CS;
   wire OE;
@@ -21,28 +20,24 @@ module test;
   initial begin
      $dumpfile("test.vcd");
      $dumpvars(0,test);
-     # 2 reset = 1;
+     $dumpon;
+     # 1 reset = 1;
      # 2 reset = 0;
      // write
+     # 1 address = 17'h0;
+     # 1 data_write = 16'hAAAA;
+     # 2 write = 1;
+     # 2 write = 0;
      wait(ready == 1);
-     address = 17'h0;
-     data_write = 16'hAAAA;
-     # 2
-     write <= 1;
-     # 2
-     write <= 0;
      // read
-     # 6
-     set_data <= 1;
-     read <= 1;
-     wait(ready == 1);
-     read <= 0;
+     # 1 set_data <= 1;
+     # 2 read = 1;
+     # 2 read = 0;
      # 20
      $finish;
   end
 
-        
-  sram sram_test(.clk(clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), .data_pins_out(data_pins_out), .data_pins_in(data_pins_in), .OE(OE), .CS(CS), .WE(WE), .data_pins_out_en(data_pins_out_en));
+  sram sram_test(.clk(clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), .data_pins_out(data_pins_out), .data_pins_in(data_pins_in), .OE(OE), .CS(CS), .WE(WE));
 
   always #1 clk = !clk;
 
