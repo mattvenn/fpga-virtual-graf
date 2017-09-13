@@ -111,8 +111,8 @@ module top (
 
     `ifdef video
     divM #(.M(5)) clockdiv(.clk_in(clkx5), .clk_out(vga_clk));
-    wire [7:0] pixel_buf;
-    vga vga_test(.reset(reset), .pixel_buf(pixel_buf), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
+    wire [7:0] pixels;
+    vga vga_test(.reset(reset), .pixels(pixels), .clk(vga_clk), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hcounter(hcounter), .vcounter(vcounter));
 
     dvid dvid_test(.clk(vga_clk), .clkx5(clkx5), .hsync(hsync), .vsync(vsync), .blank(blank), .red(red), .green(green), .blue(blue), .hdmi_p(PMOD[0:3]), .hdmi_n(PMOD[4:7]));
 
@@ -146,7 +146,7 @@ module top (
         .OE(RAMOE), .WE(RAMWE), .CS(RAMCS)
         );
     
-    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixel_buf(pixel_buf), .hcounter(hcounter), .vcounter(vcounter), .x(x), .y(y));
+    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter), .x(x), .y(y));
     `endif
 endmodule
     

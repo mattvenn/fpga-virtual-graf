@@ -1,19 +1,19 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Tue Sep 12 11:07:48 2017
+[*] Wed Sep 13 08:10:33 2017
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/test.vcd"
-[dumpfile_mtime] "Tue Sep 12 11:05:54 2017"
-[dumpfile_size] 4395
+[dumpfile_mtime] "Wed Sep 13 08:09:15 2017"
+[dumpfile_size] 4871
 [savefile] "/home/mattvenn/work/fpga/virtual-graffiti/gtk-vga-sram.gtkw"
 [timestart] 767993
 [size] 1600 1148
 [pos] 0 0
-*-3.000000 768024 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.000000 768030 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.pb.
 [sst_width] 263
-[signals_width] 303
+[signals_width] 360
 [sst_expanded] 1
 [sst_vpaned_height] 348
 @28
@@ -23,11 +23,15 @@ test.erase
 @24
 test.x[9:0]
 test.y[9:0]
-@23
+@22
 test.pb_state[3:0]
 @200
 -
 -pix buf
+@22
+test.pb.pixels[7:0]
+@23
+test.pb.pixel_buf[7:0]
 @2022
 ^1 /home/mattvenn/work/fpga/virtual-graffiti/pix_buf_state_filter.txt
 test.pb.ram_state[3:0]
@@ -53,6 +57,7 @@ test.sram_test.wait_count[1:0]
 test.sram_test.address_pins[17:0]
 @28
 test.sram_test.ready
+test.sram_test.read
 test.sram_test.write
 test.sram_test.write_enable
 test.sram_test.output_enable
@@ -60,5 +65,10 @@ test.sram_test.data_pins_out_en
 @22
 test.sram_test.data_read_reg[15:0]
 test.sram_test.data_write_reg[15:0]
+@200
+-
+-vga
+@22
+test.vga_test.pixels[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

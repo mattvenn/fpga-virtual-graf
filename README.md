@@ -10,6 +10,8 @@ my first 'proper' FPGA project.
 
 # Things to do
 
+* write single pixels, need to OR what is in ram already, and get the right pixel
+* write blocks of pixels (2x2?)
 * tried clock enable on i2c (on separate branch), but slowed down timing estimate
 * default cases for state machines
 
