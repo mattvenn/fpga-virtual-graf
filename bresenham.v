@@ -51,14 +51,7 @@ module bresenham (
                 end
             end
             STATE_PLOT: begin
-            /*
                 counter <= counter + 1;
-                if(counter == 200) begin // stop hanging while debugging
-                    done <= 1;
-                    state <= STATE_IDLE;
-
-                end
-                */
                 if(x == x1 && y == y1 ) begin
                     done <= 1;
                     state <= STATE_IDLE;

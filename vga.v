@@ -29,6 +29,9 @@ Vertical Timing
 33      back
 525     whole
 -       vsync
+
+45 blank lines at the bottom, 800 pix wide = 36k clocks for other things
+
 */
 
 `default_nettype none

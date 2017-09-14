@@ -22,6 +22,11 @@ all: $(PROJ).bin $(PROJ).rpt
 %.rpt: %.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
+debug-bresenham:
+	iverilog -o bresenham bresenham_tb.v bresenham.v
+	vvp bresenham -fst
+	gtkwave test.vcd gtk-bresenham.gtkw
+
 debug-sram:
 	iverilog -o sram sram_tb.v sram.v
 	vvp sram -fst
