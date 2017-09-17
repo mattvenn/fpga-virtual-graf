@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Wed Sep 13 08:10:33 2017
+[*] Sun Sep 17 12:41:05 2017
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/test.vcd"
-[dumpfile_mtime] "Wed Sep 13 08:09:15 2017"
-[dumpfile_size] 4871
+[dumpfile_mtime] "Sun Sep 17 12:39:56 2017"
+[dumpfile_size] 4286
 [savefile] "/home/mattvenn/work/fpga/virtual-graffiti/gtk-vga-sram.gtkw"
-[timestart] 767993
+[timestart] 0
 [size] 1600 1148
 [pos] 0 0
-*-4.000000 768030 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.000000 36 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.pb.
 [sst_width] 263
@@ -23,18 +23,12 @@ test.erase
 @24
 test.x[9:0]
 test.y[9:0]
-@22
-test.pb_state[3:0]
 @200
 -
 -pix buf
 @22
 test.pb.pixels[7:0]
-@23
 test.pb.pixel_buf[7:0]
-@2022
-^1 /home/mattvenn/work/fpga/virtual-graffiti/pix_buf_state_filter.txt
-test.pb.ram_state[3:0]
 @24
 test.pb.hcounter[10:0]
 test.pb.vcounter[9:0]
@@ -45,6 +39,9 @@ test.vga_test.hcounter[10:0]
 test.vga_test.vcounter[9:0]
 @24
 test.sram_test.address[17:0]
+@2023
+^1 /home/mattvenn/work/fpga/virtual-graffiti/pix_buf_state_filter.txt
+test.pb.ram_state[1:0]
 @200
 -
 -sram

@@ -46,7 +46,8 @@ module vga (
     output reg [9:0] vcounter,
     output reg hsync,
     output reg vsync,
-    output reg blank
+    output reg blank,
+    output reg lower_blank
     );
 
 //    reg [10:0] hcounter = 0;
@@ -62,6 +63,7 @@ module vga (
         hsync <= 1'b1;
         vsync <= 1'b1;
         blank <= 1'b0;
+        lower_blank <= 1'b0;
 
         // sync pulses
         if(hcounter > 655 && hcounter < 751)
@@ -71,6 +73,8 @@ module vga (
         // blank is whenever outside of viewable area
         if(hcounter > 639 || vcounter > 479)
            blank <= 1'b1;
+        if(vcounter > 479 )
+           lower_blank <= 1'b1;
 
         // top and bottom border
         if(vcounter < 10 || ( vcounter > 470 && vcounter < 480)) begin

@@ -23,7 +23,7 @@ module sram (
     input wire [15:0] data_write,       // the data to write
     output wire [15:0] data_read,       // the data that's been read
     input wire [17:0] address,          // address to write to
-    output wire ready,                  // high when ready for next operation
+    output reg ready,                  // high when ready for next operation
     output reg data_pins_out_en,       // when to switch between in and out on data pins
 
     // SRAM pins
@@ -60,7 +60,7 @@ module sram (
     assign WE = !write_enable;
     assign CS = !chip_select;
 
-    assign ready = (!reset && state == STATE_IDLE) ? 1 : 0; 
+//    assign ready = (!reset && state == STATE_IDLE) ? 1 : 0; 
 
     initial begin
         state <= STATE_IDLE;
@@ -77,6 +77,7 @@ module sram (
             data_read_reg <= 0;
             chip_select <= 0;
             write_enable <= 0;
+            ready <= 1;
         end
         else begin
             case(state)
@@ -86,9 +87,16 @@ module sram (
                     chip_select <= 0;
                     data_pins_out_en <= 0;
                     wait_count <= 0;
+                    ready <= 1;
 
-                    if(write) state <= STATE_WRITE_SETUP;
-                    else if(read) state <= STATE_READ_SETUP;
+                    if(write) begin
+                        state <= STATE_WRITE_SETUP;
+                        ready <= 0;
+                    end
+                    else if(read) begin
+                        state <= STATE_READ_SETUP;
+                        ready <= 0;
+                    end
                 end
 
                 STATE_WRITE_SETUP: begin
@@ -103,11 +111,11 @@ module sram (
                     state <= STATE_WRITE_WAIT;      // next state...
                 end
                 STATE_WRITE_WAIT: begin
-                    wait_count <= wait_count + 1;   // sram takes a moment
-                    if(wait_count == 1) begin
+                    //wait_count <= wait_count + 1;   // sram takes a moment
+                    //if(wait_count == 1) begin
                         write_enable <= 0;          // write happens on falling edge of write (rising of !WE)
                         state <= STATE_IDLE;        // next state...
-                    end
+                    //end
                 end
 
                 STATE_READ_SETUP: begin
@@ -117,8 +125,8 @@ module sram (
                     state <= STATE_READ_WAIT;       // next state...
                 end
                 STATE_READ_WAIT: begin
-                    wait_count <= wait_count + 1;   // wait for data to settle
-                    if(wait_count == 1)
+                    //wait_count <= wait_count + 1;   // wait for data to settle
+                    //if(wait_count == 1)
                         state <= STATE_READ;        // next state...
                 end
                 STATE_READ: begin

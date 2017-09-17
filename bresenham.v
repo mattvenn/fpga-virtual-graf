@@ -1,26 +1,27 @@
 `default_nettype none
 module bresenham (
     input wire clk,
+    input wire clk_en,
     input wire reset,
     input wire start,
-    input wire [7:0] x0,
-    input wire [7:0] y0,
-    input wire [7:0] x1,
-    input wire [7:0] y1,
+    input wire [9:0] x0,
+    input wire [9:0] y0,
+    input wire [9:0] x1,
+    input wire [9:0] y1,
     output reg plot,
-    output reg [7:0] x,
-    output reg [7:0] y,
+    output reg [9:0] x,
+    output reg [9:0] y,
     output reg done);
 
     reg [2:0] state;
-    reg signed [7:0] dx;
-    reg signed [7:0] dy;
-    reg signed [7:0] sx;
-    reg signed [7:0] sy;
-    reg signed [7:0] err;
-    reg signed [7:0] err2;
+    reg signed [9:0] dx;
+    reg signed [9:0] dy;
+    reg signed [9:0] sx;
+    reg signed [9:0] sy;
+    reg signed [9:0] err;
+    reg signed [9:0] err2;
 
-    reg [7:0] counter;
+    reg [9:0] counter;
 
     localparam STATE_IDLE = 0;
     localparam STATE_PLOT = 1;
@@ -32,8 +33,7 @@ module bresenham (
             plot <= 0;
             state <= STATE_IDLE;
         end
-
-        case(state)
+        if(clk_en) case(state)
             STATE_IDLE: begin
                 done <= 0;
                 if(start) begin

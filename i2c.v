@@ -146,7 +146,31 @@ module top (
         .OE(RAMOE), .WE(RAMWE), .CS(RAMCS)
         );
     
-    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter), .x(x), .y(y));
+   // pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(~BUTTON[0]), .ram_state(PMOD[23:20]), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter), .x(x), .y(y));
+   pixel_buffer pb(.clk(vga_clk), .reset(reset), .address(pb_address), .data_read(data_read), .read(pb_read), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter)); 
     `endif
+
+   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(~BUTTON[0]), .cam_x(x), .cam_y(y), .start(start_write));
+
+
+    reg start_write;
+    wire wb_read, pb_read;
+    wire [17:0] pb_address;
+    wire [17:0] wb_address;
+
+    always @(posedge vga_clk) 
+        start_write <= vcounter == 480 && hcounter == 0;
+
+    // mux
+    always @(posedge vga_clk) begin
+        if( vcounter > 479 ) begin
+            read <= wb_read;
+            address <= wb_address;
+        end else begin
+            read <= pb_read;
+            address <= pb_address;
+        end
+    end
+
 endmodule
     

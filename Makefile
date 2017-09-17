@@ -2,7 +2,7 @@ PROJ = i2c
 PIN_DEF = blackice.pcf
 DEVICE = hx8k
 
-SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v
+SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v
 
 all: $(PROJ).bin $(PROJ).rpt 
 
@@ -21,6 +21,11 @@ all: $(PROJ).bin $(PROJ).rpt
 
 %.rpt: %.asc
 	icetime -d $(DEVICE) -mtr $@ $<
+
+debug-sram-vga-line:
+	iverilog -o sram_vga_line sram_vga_line_tb.v sram.v vga.v bresenham.v pixel_buffer.v write_buffer.v
+	vvp sram_vga_line -fst
+	gtkwave test.vcd gtk-sram_vga_line.gtkw
 
 debug-bresenham:
 	iverilog -o bresenham bresenham_tb.v bresenham.v

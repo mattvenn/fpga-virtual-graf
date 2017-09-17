@@ -52,7 +52,7 @@ module test;
 
   sram sram_test(.clk(vga_clk), .address(address), .data_read(data_read), .data_write(data_write), .write(write), .read(read), .reset(reset), .ready(ready), .data_pins_in(data_pins_in), .OE(OE), .CS(CS), .WE(WE), .data_pins_out_en(data_pins_out_en));
 
-    pixel_buffer pb(.clk(vga_clk), .reset(reset), .erase_button(erase), .address(address), .data_read(data_read), .data_write(data_write), .read(read), .write(write), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter), .ram_state(pb_state), .x(x), .y(y));
+    pixel_buffer pb(.clk(vga_clk), .reset(reset), .address(address), .data_read(data_read), .read(read),  .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter));
 
   /* Make a regular pulsing clock. */
   always #1 vga_clk = !vga_clk; // 25 mhz
