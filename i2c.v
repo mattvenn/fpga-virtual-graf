@@ -32,7 +32,7 @@ module top (
 
     assign LED[0] = reset;
     // y is 1023 if no blob found
-    assign LED[1] = (y < 1023) ? 1 : 0;
+    assign LED[1] = (y_cam < 1023) ? 1 : 0;
     assign LED[2] = led_counter[26];
     reg [26:0] led_counter;
 
@@ -40,8 +40,10 @@ module top (
     reg i2c_start = 1;
 
     // wiimote camera is 1024 x 768
+    reg[9:0] x_cam;
+    reg[9:0] y_cam;
     reg[9:0] x;
-    reg[9:0] y;
+    reg[9:0] y; // could be [8:0]
 
     wire reset;
     assign pixart_reset = 1;
@@ -53,7 +55,9 @@ module top (
     divM #(.M(500)) clockdiv_cam(.clk_in(clk), .clk_out(cam_clk));
 
    `ifdef camera
-    camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x), .y(y)); //, .debug(PIO0)); 
+    camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x_cam), .y(y_cam)); //, .debug(PIO0)); 
+    // remap from 1024 x 768 -> 640 x 480
+    map_cam mc(.clk(vga_clk), .reset(reset), .x_in(x_cam), .y_in(y_cam), .x_out(x), .y_out(y));
     `endif
 
 

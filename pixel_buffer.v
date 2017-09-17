@@ -14,14 +14,12 @@ module pixel_buffer(
 );
 
     reg [1:0] ram_state = STATE_IDLE;
-    reg [5:0] line_buffer_index; // offset into memory for each block of 16 pixels
-    reg [7:0] pixel_buf;
+    reg [7:0] line_buffer_index; // offset into memory for each block of 8 pixels
 
     // SRAM buffer state machine            // 7654 on the pmod tek adapter
     localparam STATE_IDLE = 0;              // 0000
     localparam STATE_READ = 1;              // 0001
     localparam STATE_READ_WAIT = 2;         // 0010
-    localparam STATE_BUFF_WRITE = 3;        // 0011
 
     always @(posedge clk) begin
         if( reset == 1 ) begin
@@ -35,11 +33,11 @@ module pixel_buffer(
                 address <= 0;
 
                 if(hcounter == 0)
-                    line_buffer_index <= 0;
+                    line_buffer_index <= 0;     // reset counter
                 if(hcounter[2:0] == 4'b111) 
-                    pixels <= pixel_buf;            // update the output from the buffer
+                    pixels <= data_read[7:0];   // update the output from the buffer - bit 13 is not working, so only use lower byte
                 if(hcounter[2:0] == 4'b000 && vcounter < 480 && hcounter < 640) begin     // at the end of the visible line
-                    ram_state <= STATE_READ;        // read the next line of buffer from sram into bram
+                    ram_state <= STATE_READ;    // read the next line of buffer from sram into bram
                 end
             end
             STATE_READ: begin
@@ -50,13 +48,8 @@ module pixel_buffer(
                end
             end
             STATE_READ_WAIT: begin
-               ram_state <= STATE_BUFF_WRITE;
-               read <= 1;
-            end
-            STATE_BUFF_WRITE: begin
-               read <= 0;
-               pixel_buf <= data_read[7:0]; // bit 13 is not working, so only use lower byte
                ram_state <= STATE_IDLE;
+               read <= 1;
             end
             default: ram_state <= STATE_IDLE;
         endcase
