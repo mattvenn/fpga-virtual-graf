@@ -150,10 +150,11 @@ module top (
    pixel_buffer pb(.clk(vga_clk), .reset(reset), .address(pb_address), .data_read(data_read), .read(pb_read), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter)); 
     `endif
 
-   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(~BUTTON[0]), .cam_x(x), .cam_y(y), .start(start_write));
+   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(~BUTTON[0]), .cam_x(x), .cam_y(y), .start(start_write), .clk_en(write_buf_clk_en));
 
 
     reg start_write;
+    reg write_buf_clk_en;
     wire wb_read, pb_read;
     wire [17:0] pb_address;
     wire [17:0] wb_address;
@@ -166,9 +167,11 @@ module top (
         if( vcounter > 479 ) begin
             read <= wb_read;
             address <= wb_address;
+            write_buf_clk_en <= 1;
         end else begin
             read <= pb_read;
             address <= pb_address;
+            write_buf_clk_en <= 0;
         end
     end
 
