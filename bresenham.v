@@ -14,14 +14,14 @@ module bresenham (
     output reg done);
 
     reg [2:0] state;
-    reg signed [9:0] dx;
-    reg signed [9:0] dy;
-    reg signed [9:0] sx;
-    reg signed [9:0] sy;
-    reg signed [9:0] err;
-    reg signed [9:0] err2;
+    reg signed [10:0] dx; // one more than input register for the sign bit
+    reg signed [10:0] dy;
+    reg signed [10:0] sx;
+    reg signed [10:0] sy;
+    reg signed [10:0] err;
+    reg signed [11:0] err2; // has to be twice as large as err reg
 
-    reg [9:0] counter;
+    reg [10:0] counter;
 
     localparam STATE_IDLE = 0;
     localparam STATE_PLOT = 1;
@@ -65,6 +65,11 @@ module bresenham (
                         err = err + dx;
                         y <= y + sy;
                     end
+                end
+                // catch problems where the line never ends
+                if(counter > 2000) begin
+                    done <= 1;
+                    state <= STATE_IDLE;
                 end
             end
             default:

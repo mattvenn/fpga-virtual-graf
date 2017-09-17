@@ -31,11 +31,11 @@ module top (
     end
 
     assign LED[0] = reset;
-    // y is 1023 if no blob found
-    assign LED[1] = (y_cam < 1023) ? 1 : 0;
-    assign LED[2] = led_counter[26];
+    assign LED[1] = cam_valid;
+    assign LED[2] = led_counter[26]; // flash slowly
     reg [26:0] led_counter;
 
+    wire cam_valid;
     reg cam_clk;
     reg i2c_start = 1;
 
@@ -57,7 +57,7 @@ module top (
    `ifdef camera
     camera cam(.i2c_sda_dir(i2c_sda_dir), .clk (cam_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .start(i2c_start), .x(x_cam), .y(y_cam)); //, .debug(PIO0)); 
     // remap from 1024 x 768 -> 640 x 480
-    map_cam mc(.clk(vga_clk), .reset(reset), .x_in(x_cam), .y_in(y_cam), .x_out(x), .y_out(y));
+    map_cam mc(.clk(vga_clk), .reset(reset), .x_in(x_cam), .y_in(y_cam), .x_out(x), .y_out(y), .valid(cam_valid));
     `endif
 
 
@@ -154,7 +154,7 @@ module top (
    pixel_buffer pb(.clk(vga_clk), .reset(reset), .address(pb_address), .data_read(data_read), .read(pb_read), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter)); 
     `endif
 
-   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(~BUTTON[0]), .cam_x(x), .cam_y(y), .start(start_write), .clk_en(write_buf_clk_en));
+   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(~BUTTON[0]), .cam_x(x), .cam_y(y), .cam_valid(cam_valid), .start(start_write), .clk_en(write_buf_clk_en));
 
 
     reg start_write;

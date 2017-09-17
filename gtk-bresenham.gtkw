@@ -1,48 +1,41 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Thu Sep 14 09:10:59 2017
+[*] Sun Sep 17 15:25:53 2017
 [*]
 [dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/test.vcd"
-[dumpfile_mtime] "Thu Sep 14 09:10:29 2017"
-[dumpfile_size] 960
+[dumpfile_mtime] "Sun Sep 17 15:25:22 2017"
+[dumpfile_size] 4910
 [savefile] "/home/mattvenn/work/fpga/virtual-graffiti/gtk-bresenham.gtkw"
 [timestart] 0
-[size] 1440 600
-[pos] 107 192
-*-8.365407 1070 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1600 1176
+[pos] 0 24
+*-12.365406 4270 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [sst_width] 263
 [signals_width] 249
 [sst_expanded] 1
-[sst_vpaned_height] 155
+[sst_vpaned_height] 358
 @28
 test.line.clk
 test.line.reset
 test.line.start
 test.line.plot
+test.line.clk_en
 @200
 -
 @28
 test.line.done
-@2022
+@2024
 ^1 /home/mattvenn/work/fpga/virtual-graffiti/bresenham_state_filter.txt
 test.line.state[2:0]
-@22
-test.x0[7:0]
-test.y0[7:0]
-test.x1[7:0]
-test.y1[7:0]
 @24
-test.line.x[7:0]
-test.line.y[7:0]
-@420
-test.line.err[7:0]
-test.line.err2[7:0]
-test.line.dx[7:0]
-test.line.dy[7:0]
-test.line.sx[7:0]
-test.line.sy[7:0]
+test.line.x[9:0]
+test.line.y[9:0]
+test.line.x0[9:0]
+test.line.y0[9:0]
+test.line.x1[9:0]
+test.line.y1[9:0]
 @25
-test.line.counter[7:0]
+test.line.counter[10:0]
 [pattern_trace] 1
 [pattern_trace] 0
