@@ -17,7 +17,7 @@ module camera(
     output reg[9:0] y,
     output reg[7:0] debug
 );
-    reg [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
+    localparam [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
     reg [3:0] config_byte = 5;
     reg [4:0] data_byte = 0;
     reg [4:0] packets;
