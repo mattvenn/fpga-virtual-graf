@@ -21,14 +21,11 @@ module bresenham (
     reg signed [10:0] err;
     reg signed [11:0] err2; // has to be twice as large as err reg
 
-    reg [10:0] counter;
-
     localparam STATE_IDLE = 0;
     localparam STATE_PLOT = 1;
 
     always @(posedge clk) begin
         if(reset) begin
-            counter <= 0;
             done <= 0;
             plot <= 0;
             state <= STATE_IDLE;
@@ -51,7 +48,6 @@ module bresenham (
                 end
             end
             STATE_PLOT: begin
-                counter <= counter + 1;
                 if(x == x1 && y == y1 ) begin
                     done <= 1;
                     state <= STATE_IDLE;
@@ -65,11 +61,6 @@ module bresenham (
                         err = err + dx;
                         y <= y + sy;
                     end
-                end
-                // catch problems where the line never ends
-                if(counter > 2000) begin
-                    done <= 1;
-                    state <= STATE_IDLE;
                 end
             end
             default:

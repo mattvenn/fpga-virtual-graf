@@ -163,8 +163,14 @@ module top (
     wire [17:0] pb_address;
     wire [17:0] wb_address;
 
+    /*
+    maybe interaction between this and the below is causing intermittent line drawing?
+    like if the start_write flag is missed by write_buffer
+    */
+
+    
     always @(posedge vga_clk) 
-        start_write <= vcounter == 480 && hcounter == 0;
+        start_write <= vcounter == 481 && hcounter == 0;
 
     // mux
     always @(posedge vga_clk) begin
