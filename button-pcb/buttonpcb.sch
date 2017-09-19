@@ -1,0 +1,257 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:buttonpcb-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L CONN_01X06 Pmod1
+U 1 1 59BFFE46
+P 5900 3000
+F 0 "Pmod1" H 5978 3041 50  0000 L CNN
+F 1 "CONN_01X06" H 5978 2950 50  0000 L CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 5900 3000 50  0001 C CNN
+F 3 "" H 5900 3000 50  0000 C CNN
+	1    5900 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR01
+U 1 1 59BFFED8
+P 5500 3150
+F 0 "#PWR01" H 5500 2900 50  0001 C CNN
+F 1 "Earth" H 5500 3000 50  0001 C CNN
+F 2 "" H 5500 3150 50  0000 C CNN
+F 3 "" H 5500 3150 50  0000 C CNN
+	1    5500 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR02
+U 1 1 59BFFF12
+P 5250 3250
+F 0 "#PWR02" H 5250 3100 50  0001 C CNN
+F 1 "VCC" H 5267 3423 50  0000 C CNN
+F 2 "" H 5250 3250 50  0000 C CNN
+F 3 "" H 5250 3250 50  0000 C CNN
+	1    5250 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5250 3250 5700 3250
+Wire Wire Line
+	5500 3150 5700 3150
+$Comp
+L SW_PUSH SW1
+U 1 1 59BFFF76
+P 6950 2550
+F 0 "SW1" H 6950 2805 50  0000 C CNN
+F 1 "SW_PUSH" H 6950 2714 50  0000 C CNN
+F 2 "fp:CHERRY_MX" H 6950 2550 50  0001 C CNN
+F 3 "" H 6950 2550 50  0000 C CNN
+	1    6950 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW2
+U 1 1 59BFFFF6
+P 6950 2950
+F 0 "SW2" H 6950 3205 50  0000 C CNN
+F 1 "SW_PUSH" H 6950 3114 50  0000 C CNN
+F 2 "fp:CHERRY_MX" H 6950 2950 50  0001 C CNN
+F 3 "" H 6950 2950 50  0000 C CNN
+	1    6950 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR03
+U 1 1 59C00069
+P 7250 2550
+F 0 "#PWR03" H 7250 2300 50  0001 C CNN
+F 1 "Earth" H 7250 2400 50  0001 C CNN
+F 2 "" H 7250 2550 50  0000 C CNN
+F 3 "" H 7250 2550 50  0000 C CNN
+	1    7250 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR04
+U 1 1 59C00081
+P 7250 2950
+F 0 "#PWR04" H 7250 2700 50  0001 C CNN
+F 1 "Earth" H 7250 2800 50  0001 C CNN
+F 2 "" H 7250 2950 50  0000 C CNN
+F 3 "" H 7250 2950 50  0000 C CNN
+	1    7250 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR05
+U 1 1 59C00092
+P 6450 2250
+F 0 "#PWR05" H 6450 2100 50  0001 C CNN
+F 1 "VCC" H 6467 2423 50  0000 C CNN
+F 2 "" H 6450 2250 50  0000 C CNN
+F 3 "" H 6450 2250 50  0000 C CNN
+	1    6450 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 59C000FB
+P 6450 2400
+F 0 "R2" H 6520 2446 50  0000 L CNN
+F 1 "R" H 6520 2355 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 6380 2400 50  0001 C CNN
+F 3 "" H 6450 2400 50  0000 C CNN
+	1    6450 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R3
+U 1 1 59C00139
+P 6450 2800
+F 0 "R3" H 6520 2846 50  0000 L CNN
+F 1 "R" H 6520 2755 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 6380 2800 50  0001 C CNN
+F 3 "" H 6450 2800 50  0000 C CNN
+	1    6450 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR06
+U 1 1 59C00178
+P 6450 2650
+F 0 "#PWR06" H 6450 2500 50  0001 C CNN
+F 1 "VCC" V 6468 2777 50  0000 L CNN
+F 2 "" H 6450 2650 50  0000 C CNN
+F 3 "" H 6450 2650 50  0000 C CNN
+	1    6450 2650
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6450 2550 6650 2550
+Wire Wire Line
+	6450 2950 6650 2950
+Text Label 6650 2950 0    60   ~ 0
+b1
+Text Label 6650 2550 0    60   ~ 0
+b2
+$Comp
+L LED D1
+U 1 1 59C001F0
+P 7900 2400
+F 0 "D1" V 7946 2292 50  0000 R CNN
+F 1 "LED" V 7855 2292 50  0000 R CNN
+F 2 "LEDs:LED-1206" H 7900 2400 50  0001 C CNN
+F 3 "" H 7900 2400 50  0000 C CNN
+	1    7900 2400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R1
+U 1 1 59C002CF
+P 7900 2050
+F 0 "R1" H 7970 2096 50  0000 L CNN
+F 1 "R" H 7970 2005 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 7830 2050 50  0001 C CNN
+F 3 "" H 7900 2050 50  0000 C CNN
+	1    7900 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR07
+U 1 1 59C0032F
+P 7900 2600
+F 0 "#PWR07" H 7900 2350 50  0001 C CNN
+F 1 "Earth" H 7900 2450 50  0001 C CNN
+F 2 "" H 7900 2600 50  0000 C CNN
+F 3 "" H 7900 2600 50  0000 C CNN
+	1    7900 2600
+	1    0    0    -1  
+$EndComp
+Text Label 7900 1900 0    60   ~ 0
+led
+Text Label 5700 3050 2    60   ~ 0
+led
+Text Label 5700 2850 2    60   ~ 0
+b1
+Text Label 5700 2750 2    60   ~ 0
+b2
+$Comp
+L LED D2
+U 1 1 59C00512
+P 8350 2350
+F 0 "D2" V 8396 2242 50  0000 R CNN
+F 1 "LED" V 8305 2242 50  0000 R CNN
+F 2 "LEDs:LED-1206" H 8350 2350 50  0001 C CNN
+F 3 "" H 8350 2350 50  0000 C CNN
+	1    8350 2350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R4
+U 1 1 59C00518
+P 8350 2000
+F 0 "R4" H 8420 2046 50  0000 L CNN
+F 1 "R" H 8420 1955 50  0000 L CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 8280 2000 50  0001 C CNN
+F 3 "" H 8350 2000 50  0000 C CNN
+	1    8350 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR08
+U 1 1 59C0051E
+P 8350 2550
+F 0 "#PWR08" H 8350 2300 50  0001 C CNN
+F 1 "Earth" H 8350 2400 50  0001 C CNN
+F 2 "" H 8350 2550 50  0000 C CNN
+F 3 "" H 8350 2550 50  0000 C CNN
+	1    8350 2550
+	1    0    0    -1  
+$EndComp
+Text Label 8350 1850 0    60   ~ 0
+led2
+Text Label 5700 2950 2    60   ~ 0
+led2
+$EndSCHEMATC
