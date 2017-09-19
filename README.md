@@ -15,6 +15,11 @@ my first 'proper' FPGA project.
 * tried clock enable on i2c (on separate branch), but slowed down timing estimate
 * default cases for state machines
 
+# Storing configuration on the board
+
+[Instructions
+here](https://forum.mystorm.uk/t/config-from-non-voltatile-memory/242/5)
+
 # SRAM video buffer
 
 Using the SRAM on the back of the board for persistant graffitis. This caused 2
