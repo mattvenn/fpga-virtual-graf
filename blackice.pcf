@@ -15,14 +15,14 @@
 #
 ## User Constraint File for myStorm
 #
-##pmod 1
+##pmod 1 lvds pairs 2 & 5
 #
 set_io --warn-no-port PMOD[0] 94 # rd6
 set_io --warn-no-port PMOD[1] 91 # rd4
 set_io --warn-no-port PMOD[2] 88 # rd2
 set_io --warn-no-port PMOD[3] 85 # rd0
 
-#pmod 2
+#pmod 2 lvds pairs 3 & 4
 set_io --warn-no-port PMOD[4] 95 # rd7
 set_io --warn-no-port PMOD[5] 93 # rd5
 set_io --warn-no-port PMOD[6] 90 # rd3
@@ -61,13 +61,13 @@ set_io --warn-no-port PMOD[21] 113 #C10
 set_io --warn-no-port PMOD[22] 110 #C8
 set_io --warn-no-port PMOD[23] 106 #C6
 #
-##pmod 7 lvds pairs 2 & 5
+##pmod 7 
 set_io --warn-no-port PMOD[24] 10 # 5b
 set_io --warn-no-port PMOD[25] 9 # 5a
 set_io --warn-no-port PMOD[26] 2 # 2b
 set_io --warn-no-port PMOD[27] 1 # 2a
 #
-##pmod 8 lvds pairs 3 & 4
+##pmod 8 
 set_io --warn-no-port PMOD[28] 8 # 4b
 set_io --warn-no-port PMOD[29] 7 # 4a
 set_io --warn-no-port PMOD[30] 4 # 3b

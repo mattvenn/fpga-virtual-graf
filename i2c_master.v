@@ -1,6 +1,7 @@
 `default_nettype none
 module i2c_master(
     input wire clk,
+    input wire clk_en,
     input wire reset,
     input wire [6:0] addr,
     input wire [7:0] data, 
@@ -82,7 +83,7 @@ module i2c_master(
             i2c_sda_tri <= 1;
             i2c_scl_reg <= 1;
         end
-        else begin
+        else if (clk_en) begin
             case(state)
                 STATE_IDLE: begin
                     i2c_sda_tri <= 1;

@@ -2,7 +2,7 @@ PROJ = i2c
 PIN_DEF = blackice.pcf
 DEVICE = hx8k
 
-SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v
+SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
 
 all: $(PROJ).bin $(PROJ).rpt 
 

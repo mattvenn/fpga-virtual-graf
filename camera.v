@@ -7,6 +7,7 @@ details on camera data format: http://wiibrew.org/wiki/Wiimote#Data_Formats
 `default_nettype none
 module camera(
     input wire clk,
+    input wire clk_en,
     input wire reset,
     input wire start,
     output wire i2c_sda,
@@ -17,7 +18,7 @@ module camera(
     output reg[9:0] y,
     output reg[7:0] debug
 );
-    localparam [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
+    reg [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
     reg [3:0] config_byte = 5;
     reg [4:0] data_byte = 0;
     reg [4:0] packets;
@@ -46,13 +47,13 @@ module camera(
     localparam STATE_PROCESS_DATA = 9;
     localparam STATE_WAIT = 10;
 
-    i2c_master i2c(.i2c_sda_dir(i2c_sda_dir), .clk (clk),  .addr(i2c_addr), .data(i2c_data), .reset (reset), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_sda_in(i2c_sda_in), .i2c_scl(i2c_scl), .data_out(i2c_data_in), .packets(packets), .data_ready(data_ready), .data_req(data_req));
+    i2c_master i2c(.clk_en(clk_en), .i2c_sda_dir(i2c_sda_dir), .clk (clk),  .addr(i2c_addr), .data(i2c_data), .reset (reset), .rw(rw), .start(i2c_start), .ready(i2c_ready), .i2c_sda(i2c_sda), .i2c_sda_in(i2c_sda_in), .i2c_scl(i2c_scl), .data_out(i2c_data_in), .packets(packets), .data_ready(data_ready), .data_req(data_req));
 
     always@(posedge clk) begin
         if( reset == 1 ) begin
             state <= STATE_START;
         end
-        else begin
+        else if ( clk_en )begin
         case(state)
             STATE_START: begin
                 if(i2c_ready && start) begin
