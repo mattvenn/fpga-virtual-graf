@@ -5,12 +5,20 @@ DEVICE = hx8k
 SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
 
 all: $(PROJ).bin $(PROJ).rpt 
+svg: $(patsubst %.v,%.svg,$(SRC))
 
 %.blif: %.v $(SRC)
 	yosys -p "synth_ice40 -top top -blif $@" $^
 
 #%.blif: %.v $(SRC)
 #	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v camera.v button.v xy_leds.v
+
+# $@ The file name of the target of the rule.rule
+# $< first pre requisite
+# $^ names of all preerquisites
+
+%.svg: %.v
+	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
 
 %.asc: $(PIN_DEF) %.blif
 	#arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
@@ -86,4 +94,4 @@ clean:
 	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).rpt $(PROJ).bin
 
 .SECONDARY:
-.PHONY: all prog clean
+.PHONY: all prog clean svg

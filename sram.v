@@ -1,6 +1,7 @@
 /*
 mystorm blackice has 0.5MByte SRAM on the back of the board
 From datasheet: ISSI IS62WV25616DALL and IS62/65WV25616DBLL are high-speed, low power, 4M bit SRAMs organized as 256K words by 16 bits. 
+The part on the board appears to be the 10ns variant.
 
 a problem with the blackice board is that the PLL lines interfere with the SRAM data lines.
 
@@ -15,8 +16,9 @@ https://forum.mystorm.uk/t/fpga-unreliability-crashing-hanging/252/6?u=mattvenn
 `default_nettype none
 module sram (
     input wire reset,
-    // 50ns max for data read/write.
-    // scope shows it's about 35ns. At 100MHz, each clock cycle is 10ns, so write in 4 cycles
+    // 10ns max for data read/write.
+    // At 100MHz, each clock cycle is 10ns, so write should be fine in 2 cycles
+    // At 25Mhz, each clock cycle is 40ns, so write should be fine in 1 cycle
 	input wire clk,
     input wire write,
     input wire read,
@@ -60,7 +62,6 @@ module sram (
     assign WE = !write_enable;
     assign CS = !chip_select;
 
-//    assign ready = (!reset && state == STATE_IDLE) ? 1 : 0; 
 
     initial begin
         state <= STATE_IDLE;
@@ -83,55 +84,45 @@ module sram (
             case(state)
                 STATE_IDLE: begin
                     write_enable <= 0;
-                    output_enable <= 1;
+                    output_enable <= 0;
                     chip_select <= 0;
                     data_pins_out_en <= 0;
                     wait_count <= 0;
-                    ready <= 1;
+
+                    address_reg <= address;
+                    data_write_reg <= data_write;   
 
                     if(write) begin
-                        state <= STATE_WRITE_SETUP;
                         ready <= 0;
+                        state <= STATE_WRITE_SETUP;
+                        output_enable <= 0;
+                        chip_select <= 1;         
                     end
                     else if(read) begin
-                        state <= STATE_READ_SETUP;
                         ready <= 0;
+                        state <= STATE_READ_SETUP;
+                        output_enable <= 1;
+                        chip_select <= 1;        
                     end
                 end
 
                 STATE_WRITE_SETUP: begin
-                    chip_select <= 1;               // select chip
-                    address_reg <= address;
-                    write_enable <= 1;              // 
-                    data_write_reg <= data_write;   // put the data on the pins
-                    state <= STATE_WRITE;           // next state...
+                    data_pins_out_en <= 1;          
+                    write_enable <= 1;              
+                    state <= STATE_WRITE;           
                 end
                 STATE_WRITE: begin
-                    data_pins_out_en <= 1;          // turn data pins into output AFTER write_enable disables outputs
-                    state <= STATE_WRITE_WAIT;      // next state...
-                end
-                STATE_WRITE_WAIT: begin
-                    //wait_count <= wait_count + 1;   // sram takes a moment
-                    //if(wait_count == 1) begin
-                        write_enable <= 0;          // write happens on falling edge of write (rising of !WE)
-                        state <= STATE_IDLE;        // next state...
-                    //end
+                    state <= STATE_IDLE; 
+                    ready <= 1;
+                    data_pins_out_en <= 0;          
+                    write_enable <= 0;             
                 end
 
                 STATE_READ_SETUP: begin
-                    output_enable <= 1;             // turn on ram chip's outputs
-                    address_reg <= address;
-                    chip_select <= 1;               // select chip
-                    state <= STATE_READ_WAIT;       // next state...
-                end
-                STATE_READ_WAIT: begin
-                    //wait_count <= wait_count + 1;   // wait for data to settle
-                    //if(wait_count == 1)
-                        state <= STATE_READ;        // next state...
-                end
-                STATE_READ: begin
-                    data_read_reg <= data_pins_in;  // put the data on the reg
-                    state <= STATE_IDLE;            // next state...
+                    state <= STATE_READ; 
+                    data_read_reg <= data_pins_in;  
+                    ready <= 1;
+                    state <= STATE_IDLE;           
                 end
             endcase
         end
