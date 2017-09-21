@@ -22,7 +22,7 @@ module camera(
     reg [3:0] config_byte = 5;
     reg [2:0] data_byte = 0;
     reg [4:0] packets;
-    reg [8:0] state = STATE_START;
+    reg [3:0] state = STATE_START;
     reg i2c_start = 0;
     wire i2c_ready;
     reg [7:0] i2c_data;
@@ -32,8 +32,8 @@ module camera(
     wire data_ready;
     wire data_req;
     reg [6:0] delay_count = 0;
-    //reg [16*8-1:0] pos_data; // 16 bytes of pos data
-    reg [4*8-1:0] pos_data; // only need first 3 bytes
+    // array makes synthesis much more efficient
+    reg [7:0] pos_data [3:0]; // only need first 3 bytes
 
     localparam STATE_START = 0;
     localparam STATE_CONF = 1;
@@ -112,7 +112,7 @@ module camera(
             STATE_REQ_DATA_5: begin
                 if(data_ready) begin
                     if(data_byte <= 3) begin
-                        pos_data[(data_byte+1)*8-1 -: 8] <= i2c_data_in;
+                        pos_data[data_byte+1] <= i2c_data_in;
                         data_byte <= data_byte + 1;
                     end
                 end
@@ -123,8 +123,8 @@ module camera(
                 // update the camera position
                 //http://wiibrew.org/wiki/Wiimote#Data_Formats
                 // + has precedence over <<
-                x <= pos_data[2*8-1 -:8] + ((pos_data[4*8-1 -:8] & 8'b00110000) <<4); 
-                y <= pos_data[3*8-1 -:8] + ((pos_data[4*8-1 -:8] & 8'b11000000) <<2);
+                x <= pos_data[2] + ((pos_data[4] & 8'b00110000) <<4); 
+                y <= pos_data[3] + ((pos_data[4] & 8'b11000000) <<2);
                 state <= STATE_WAIT;
                 delay_count <= 0;
             end
@@ -136,5 +136,6 @@ module camera(
         endcase
         end
     end
+
 endmodule
 
