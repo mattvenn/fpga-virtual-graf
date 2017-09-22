@@ -3,10 +3,10 @@ SRC_DIR = src
 TEST_DIR = tests
 SVG_DIR = docs/svg
 BUILD_DIR = build
-PROJ = $(BUILD_DIR)/i2c
+PROJ = $(BUILD_DIR)/vgraf
 PIN_DEF = $(SRC_DIR)/blackice.pcf
 
-VERILOG = i2c.v i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
+VERILOG = top.v i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
 all: $(PROJ).bin $(PROJ).rpt 
@@ -80,7 +80,7 @@ prog: $(PROJ).bin
 	bash -c "cat $< > /dev/ttyUSB1"
 
 clean:
-	rm -f $(BUILD_DIR)*
+	rm -f $(BUILD_DIR)/*
 
 .SECONDARY:
 .PHONY: all prog clean svg
