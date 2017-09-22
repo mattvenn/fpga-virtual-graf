@@ -43,11 +43,14 @@ module write_buffer(
     localparam STATE_READ_SRAM_WAIT = 6;
     localparam STATE_WRITE_SRAM = 7;
     localparam STATE_WRITE_SRAM_WAIT = 8;
+
+    localparam NUM_LINES = 10;
     
 
     bresenham line (.clk(clk), .clk_en(line_clk_en), .reset(reset), .y(y), .x(x), .x0(x0), .y0(y0), .x1(x1), .y1(y1), .done(line_done), .start(line_start), .plot(line_plot));
 
     reg last_invalid = 0;
+    reg [3:0] num_lines = 0;
 
     always @(posedge clk) begin
         if(reset) begin
@@ -62,6 +65,7 @@ module write_buffer(
             x1 <= 0;
             y1 <= 0;
             last_invalid <= 0;
+            num_lines <= 0;
 
         end else if (clk_en) case(state)
             STATE_START: begin
@@ -71,11 +75,12 @@ module write_buffer(
                     if(erase) state <= STATE_ERASE;
                     else if (cam_valid) begin // cam valid
                         //register the line variables so they can't change while drawing the line
-                        x0 <= x1;
-                        y0 <= y1;
+                        x0 <= x1 - NUM_LINES; // need to either store the original x1, y1, or subtract the added pixels that make lines fatter
+                        y0 <= y1; // - NUM_LINES;
                         x1 <= cam_x;
                         y1 <= cam_y;
                         last_invalid <= 0;
+                        num_lines <= 0;
 
                         // only start drawing the line if the last camera value wasn't invalid
                         if(!last_invalid)
@@ -139,8 +144,15 @@ module write_buffer(
 
             STATE_WRITE_SRAM_WAIT: begin
                 ram_write <= 0;
-                if(line_done) begin
+                if(line_done && num_lines == NUM_LINES) begin
                     state <= STATE_START;
+                end else if(line_done) begin // fatten the line
+                    state <= STATE_START_LINE;
+                    x0 <= x0 + 1;
+                //    y0 <= y0 + 1;
+                    x1 <= x1 + 1;
+                 //   y1 <= y1 + 1;
+                    num_lines <= num_lines + 1;
                 end else if(ram_ready) begin
                     line_clk_en <= 1; // let line algorithm take another step
                     state <= STATE_WAIT_LINE;
