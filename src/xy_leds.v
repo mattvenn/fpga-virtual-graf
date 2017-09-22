@@ -6,7 +6,7 @@ module xy_leds(
     output wire LED1,
     output wire LED2,
     output wire LED3,
-    output wire LED4,
+    output wire LED4
 );
 
     localparam MID_X = 1024 / 2 ;
