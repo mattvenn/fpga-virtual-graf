@@ -1,59 +1,60 @@
-PROJ = i2c
-PIN_DEF = blackice.pcf
 DEVICE = hx8k
+SRC_DIR = src
+TEST_DIR = tests
+SVG_DIR = docs/svg
+BUILD_DIR = build
+PROJ = $(BUILD_DIR)/i2c
+PIN_DEF = $(SRC_DIR)/blackice.pcf
 
-SRC = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
+VERILOG = i2c.v i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
+SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
 all: $(PROJ).bin $(PROJ).rpt 
 svg: $(patsubst %.v,%.svg,$(SRC))
-
-%.blif: %.v $(SRC)
-	yosys -p "synth_ice40 -top top -blif $@" $^
-
-#%.blif: %.v $(SRC)
-#	yosys -p 'synth_ice40 -top top -blif $@' $<  i2c_master.v camera.v button.v xy_leds.v
 
 # $@ The file name of the target of the rule.rule
 # $< first pre requisite
 # $^ names of all preerquisites
 
+# rule for building svg graphs of the modules
 %.svg: %.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
+	mv $@ $(SVG_DIR)
+	rm $(basename $@).dot
 
-%.asc: $(PIN_DEF) %.blif
-	#arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
+# rules for building the blif file
+$(BUILD_DIR)/%.blif: $(SRC)
+	yosys -p "synth_ice40 -top top -blif $@" $^
+
+# asc
+$(BUILD_DIR)/%.asc: $(PIN_DEF) $(BUILD_DIR)/%.blif
 	arachne-pnr --device 8k --package tq144:4k -o $@ -p $^
 
-%.bin: %.asc
+# bin, for programming
+$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.asc
 	icepack $< $@
 
-%.rpt: %.asc
+# timing
+$(BUILD_DIR)/%.rpt: $(BUILD_DIR)/%.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
+# rules for simple tests with one verilog module per test bench
+$(BUILD_DIR)/%.out: $(TEST_DIR)/%_tb.v $(SRC_DIR)/%.v
+	iverilog -o $(basename $@).out $^
+
+$(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out 
+	vvp $< -fst
+	mv test.vcd $@
+
+debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
+	gtkwave $^
+
+# more complicated tests that need multiple modules per test
 debug-sram-vga-line:
-	iverilog -o sram_vga_line sram_vga_line_tb.v sram.v vga.v bresenham.v pixel_buffer.v write_buffer.v
-	vvp sram_vga_line -fst
-	gtkwave test.vcd gtk-sram_vga_line.gtkw
-
-debug-bresenham:
-	iverilog -o bresenham bresenham_tb.v bresenham.v
-	vvp bresenham -fst
-	gtkwave test.vcd gtk-bresenham.gtkw
-
-debug-sram:
-	iverilog -o sram sram_tb.v sram.v
-	vvp sram -fst
-	gtkwave test.vcd gtk-sram.gtkw
-
-debug-clockdiv:
-	iverilog -o clock clockdiv_tb.v clockdiv.v
-	vvp clock -fst
-	gtkwave test.vcd gtk-clock.gtkw
-
-debug-vga:
-	iverilog -o vga vga_tb.v vga.v
-	vvp vga -fst
-	gtkwave test.vcd gtk-vga.gtkw
+	iverilog -o $(DBG_DIR)/sram_vga_line sram_vga_line_tb.v sram.v vga.v bresenham.v pixel_buffer.v write_buffer.v
+	vvp $(DBG_DIR)/sram_vga_line -fst
+	mv test.vcd $(DBG_DIR)
+	gtkwave $(DBG_DIR)/test.vcd $(DBG_DIR)/gtk-sram_vga_line.gtkw
 
 debug-sram-vga:
 	iverilog -o vga-sram sram_vga_tb.v sram.v vga.v pixel_buffer.v
@@ -65,11 +66,6 @@ debug-i2c:
 	vvp i2c -fst
 	gtkwave test.vcd gtk-i2c.gtkw
 
-debug-leds:
-	iverilog -o leds xy_leds_tb.v xy_leds.v
-	vvp leds -fst
-	gtkwave test.vcd gtk-leds.gtkw
-
 debug-master:
 	iverilog -o i2c i2c_master_tb.v i2c_master.v 
 	vvp i2c -fst
@@ -80,18 +76,11 @@ debug-camera:
 	vvp camera -fst
 	gtkwave test.vcd gtk-camera.gtkw
 
-#prog: $(PROJ).bin
-#	iceprog $<
-
 prog: $(PROJ).bin
 	bash -c "cat $< > /dev/ttyUSB1"
 
-sudo-prog: $(PROJ).bin
-	@echo 'Executing prog as root!!!'
-	sudo iceprog $<
-
 clean:
-	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).rpt $(PROJ).bin
+	rm -f $(BUILD_DIR)*
 
 .SECONDARY:
 .PHONY: all prog clean svg
