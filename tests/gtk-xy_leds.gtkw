@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
+[*] Fri Sep 22 16:54:54 2017
+[*]
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/build/xy_leds.vcd"
+[dumpfile_mtime] "Fri Sep 22 16:53:29 2017"
+[dumpfile_size] 936
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/tests/gtk-xy_leds.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-2.888969 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[sst_width] 263
+[signals_width] 90
+[sst_expanded] 1
+[sst_vpaned_height] 155
+@28
+test.leds.LED1
+test.leds.LED2
+test.leds.LED3
+test.leds.LED4
+@22
+test.leds.x[9:0]
+test.leds.y[9:0]
+@29
+test.leds.reset
+[pattern_trace] 1
+[pattern_trace] 0

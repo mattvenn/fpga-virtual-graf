@@ -1,0 +1,25 @@
+[*]
+[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
+[*] Fri Sep 22 16:55:57 2017
+[*]
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/build/map_cam.vcd"
+[dumpfile_mtime] "Fri Sep 22 16:55:37 2017"
+[dumpfile_size] 13417
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/tests/gtk-map_cam.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-11.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[sst_width] 263
+[signals_width] 130
+[sst_expanded] 1
+[sst_vpaned_height] 155
+@22
+test.mc.x_in[9:0]
+test.mc.x_out[9:0]
+test.mc.y_in[9:0]
+@23
+test.mc.y_out[8:0]
+[pattern_trace] 1
+[pattern_trace] 0
