@@ -10,10 +10,15 @@ my first 'proper' FPGA project.
 
 # Things to do
 
-* write single pixels, need to OR what is in ram already, and get the right pixel
-* write blocks of pixels (2x2?)
-* tried clock enable on i2c (on separate branch), but slowed down timing estimate
 * default cases for state machines
+* sometimes doesn't start camera, needs resetting
+* won't draw without first reset
+* docs
+
+# Documentation
+
+* [ICEfloorplan](https://knielsen.github.io/ice40_viewer/ice40_viewer.html) shows how the design is laid out on the FPGA
+* Yosys can generate output graphs of the verilog with the [show](http://www.clifford.at/yosys/cmd_show.html) command.
 
 # Storing configuration on the board
 
