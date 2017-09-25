@@ -1,0 +1,32 @@
+[*]
+[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
+[*] Mon Sep 11 08:45:00 2017
+[*]
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/test.vcd"
+[dumpfile_mtime] "Mon Sep 11 08:43:33 2017"
+[dumpfile_size] 27926
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/gtk-vga.gtkw"
+[timestart] 0
+[size] 1600 1176
+[pos] -1 -1
+*-18.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[sst_width] 263
+[signals_width] 170
+[sst_expanded] 1
+[sst_vpaned_height] 357
+@28
+test.vga_test.clk
+test.vga_test.pixel
+test.vga_test.hsync
+test.vga_test.vsync
+test.vga_test.blank
+test.vga_test.blue[2:0]
+test.vga_test.red[2:0]
+test.vga_test.green[2:0]
+@25
+test.vga_test.hcounter[10:0]
+@22
+test.vga_test.vcounter[9:0]
+[pattern_trace] 1
+[pattern_trace] 0

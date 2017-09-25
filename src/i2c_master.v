@@ -1,6 +1,7 @@
 `default_nettype none
 module i2c_master(
     input wire clk,
+    input wire clk_en,
     input wire reset,
     input wire [6:0] addr,
     input wire [7:0] data, 
@@ -8,6 +9,7 @@ module i2c_master(
     input wire start,
     input wire rw, // 1 for read, 0 for write
     output wire i2c_sda,
+    output wire i2c_sda_dir,
     input wire i2c_sda_in,
     output wire i2c_scl,
     output wire ready,
@@ -39,6 +41,8 @@ module i2c_master(
     reg [7:0] count;
     reg i2c_sda_tri;
     reg i2c_scl_enable = 0;
+
+    assign i2c_sda_dir  = ~ i2c_sda_tri;
 
     reg [6:0] saved_addr;
     reg [7:0] saved_data; // 16 bytes of data max
@@ -79,7 +83,7 @@ module i2c_master(
             i2c_sda_tri <= 1;
             i2c_scl_reg <= 1;
         end
-        else begin
+        else if (clk_en) begin
             case(state)
                 STATE_IDLE: begin
                     i2c_sda_tri <= 1;

@@ -8,6 +8,38 @@ my first 'proper' FPGA project.
 * icestorm free fpga tools.
 * gtkwave for debugging.
 
+# Things to do
+
+* default cases for state machines
+* sometimes doesn't start camera, needs resetting
+* won't draw without first reset
+* docs
+
+# Documentation
+
+* [ICEfloorplan](https://knielsen.github.io/ice40_viewer/ice40_viewer.html) shows how the design is laid out on the FPGA
+* Yosys can generate output graphs of the verilog with the [show](http://www.clifford.at/yosys/cmd_show.html) command.
+
+# Storing configuration on the board
+
+[Instructions
+here](https://forum.mystorm.uk/t/config-from-non-voltatile-memory/242/5)
+
+# SRAM video buffer
+
+Using the SRAM on the back of the board for persistant graffitis. This caused 2
+major issues:
+
+* [PLL and SRAM pins collide on the board layout](https://forum.mystorm.uk/t/placement-conflict-between-sb-io-for-ram-and-pll/224/12)
+* [switching the SB_IO pins and SRAM pins at the same time](https://forum.mystorm.uk/t/fpga-unreliability-crashing-hanging/252/19) caused instability.
+
+# Wiimote Camera
+
+* (breakout board)[https://github.com/mattvenn/kicad/tree/master/wiimote-fpga)
+* 25mhz supplied on clock pin
+* reset high to run
+* wiimote camera PCB was tested with branch wii-pcb
+
 # I2C reader / writer
 
 ![fpga read](docs/fpga-i2c-read.png)
