@@ -5,6 +5,7 @@ SVG_DIR = docs/svg
 BUILD_DIR = build
 PROJ = $(BUILD_DIR)/vgraf
 PIN_DEF = $(SRC_DIR)/blackice.pcf
+SHELL := /bin/bash # Use bash syntax
 
 VERILOG = top.v i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
@@ -75,6 +76,18 @@ debug-camera:
 	iverilog -o camera camera_tb.v camera.v i2c_master.v 
 	vvp camera -fst
 	gtkwave test.vcd gtk-camera.gtkw
+
+$(PROJ).size: $(PROJ).bin
+	du -b $< | cut -f1 > $@
+
+$(PROJ)-even.bin: $(PROJ).size $(PROJ).bin
+	cp $(PROJ).bin $(PROJ)-even.bin
+	size=`cat $(PROJ).size`; truncate -s $$(echo $$size + 4 - $$size % 4 | bc) $(PROJ)-even.bin
+
+perma-prog: $(PROJ)-even.bin
+	read -p "plug central USB, remove link between 14&16, press reset on board, then press enter"	
+	sudo dfu-util -d 0483:df11 -s 0x0801F000 -D $(PROJ)-even.bin --alt 0 -t 1024
+	read -p "replace link and reset"
 
 prog: $(PROJ).bin
 	bash -c "cat $< > /dev/ttyUSB1"
