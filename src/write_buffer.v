@@ -64,7 +64,7 @@ module write_buffer(
             y0 <= 0;
             x1 <= 0;
             y1 <= 0;
-            last_invalid <= 0;
+            last_invalid <= 1; // at reset, don't have a last value
             num_lines <= 0;
 
         end else if (clk_en) case(state)

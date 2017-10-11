@@ -11,7 +11,6 @@ my first 'proper' FPGA project.
 # Things to do
 
 * default cases for state machines
-* sometimes doesn't start camera, needs resetting
 * won't draw without first reset
 * docs
 
