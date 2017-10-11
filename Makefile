@@ -51,11 +51,11 @@ debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
 
 # more complicated tests that need multiple modules per test
-debug-sram-vga-line:
-	iverilog -o $(DBG_DIR)/sram_vga_line sram_vga_line_tb.v sram.v vga.v bresenham.v pixel_buffer.v write_buffer.v
-	vvp $(DBG_DIR)/sram_vga_line -fst
-	mv test.vcd $(DBG_DIR)
-	gtkwave $(DBG_DIR)/test.vcd $(DBG_DIR)/gtk-sram_vga_line.gtkw
+$(BUILD_DIR)/camera.out: $(TEST_DIR)/camera_tb.v $(SRC_DIR)/camera.v $(SRC_DIR)/i2c_master.v
+	iverilog -o $(basename $@).out $^
+
+$(BUILD_DIR)/sram_vga_line.out: $(TEST_DIR)/sram_vga_line_tb.v $(SRC_DIR)/sram.v $(SRC_DIR)/vga.v $(SRC_DIR)/bresenham.v $(SRC_DIR)/pixel_buffer.v $(SRC_DIR)/write_buffer.v
+	iverilog -o $(basename $@).out $^
 
 debug-sram-vga:
 	iverilog -o vga-sram sram_vga_tb.v sram.v vga.v pixel_buffer.v
@@ -72,8 +72,6 @@ debug-master:
 	vvp i2c -fst
 	gtkwave test.vcd gtk-master.gtkw
 
-$(BUILD_DIR)/camera.out: $(TEST_DIR)/camera_tb.v $(SRC_DIR)/camera.v $(SRC_DIR)/i2c_master.v
-	iverilog -o $(basename $@).out $^
 
 $(PROJ).size: $(PROJ).bin
 	du -b $< | cut -f1 > $@

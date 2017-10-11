@@ -16,6 +16,7 @@ module test;
     reg [15:0] data_pins_in;
     reg read;
     reg erase = 0;
+    reg cam_valid = 0;
     wire write;
     wire ready;
 
@@ -39,8 +40,11 @@ module test;
      $dumpon;
      # 1 cam_x <= 639;
      # 1 cam_y <= 479;
-     wait(wb.done == 1);
-     # 5000
+     # 1 cam_valid <= 1;
+     wb.last_invalid <= 0; // don't want to have to wait for a screen redraw
+     wait(start_write == 1);
+//     wait(wb.line_done == 1);
+     # 500
      $finish;
   end
     
@@ -53,7 +57,7 @@ module test;
 
    pixel_buffer pb(.clk(vga_clk), .reset(reset), .address(pb_address), .data_read(data_read), .read(pb_read), .ready(ready), .pixels(pixels), .hcounter(hcounter), .vcounter(vcounter)); 
 
-   write_buffer wb(.clk(vga_clk), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(erase), .cam_x(cam_x), .cam_y(cam_y), .start(start_write), .clk_en(write_buf_clk_en));
+   write_buffer wb(.clk(vga_clk), .cam_valid(cam_valid), .reset(reset), .address(wb_address), .data_read(data_read), .ram_read(wb_read), .ram_ready(ready), .data_write(data_write), .ram_write(write), .erase(erase), .cam_x(cam_x), .cam_y(cam_y), .start(start_write), .clk_en(write_buf_clk_en));
 
     reg start_write;
     reg write_buf_clk_en;

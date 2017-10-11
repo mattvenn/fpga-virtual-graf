@@ -1,17 +1,16 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Sun Sep 17 15:18:22 2017
+[*] Wed Oct 11 17:53:02 2017
 [*]
-[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/test.vcd"
-[dumpfile_mtime] "Sun Sep 17 15:17:49 2017"
-[dumpfile_size] 17859
-[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/gtk-sram_vga_line.gtkw"
-[timestart] 764700
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/build/sram_vga_line.vcd"
+[dumpfile_mtime] "Wed Oct 11 17:52:38 2017"
+[dumpfile_size] 3465
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/tests/gtk-sram_vga_line.gtkw"
+[timestart] 767345
 [size] 1600 1148
 [pos] -1 -1
-*-13.000000 782140 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.000000 768229 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
-[treeopen] test.wb.
 [sst_width] 263
 [signals_width] 392
 [sst_expanded] 1
@@ -29,10 +28,8 @@ test.write_buf_clk_en
 -
 -line
 @2022
-^1 /home/mattvenn/work/fpga/virtual-graffiti/bresenham_state_filter.txt
+^1 /home/mattvenn/work/fpga/virtual-graffiti/tests/bresenham_state_filter.txt
 test.wb.line.state[2:0]
-@24
-test.wb.line.counter[9:0]
 @28
 test.wb.line.start
 test.wb.line.done
@@ -43,13 +40,12 @@ test.wb.line.y0[9:0]
 test.wb.line.x[9:0]
 test.wb.line.y[9:0]
 test.wb.line.x1[9:0]
-@25
 test.wb.line.y1[9:0]
 @200
 -
 -pixel buf
 @2022
-^2 /home/mattvenn/work/fpga/virtual-graffiti/pix_buf_state_filter.txt
+^2 /home/mattvenn/work/fpga/virtual-graffiti/tests/pix_buf_state_filter.txt
 test.pb.ram_state[1:0]
 @28
 test.pb.read
@@ -57,16 +53,22 @@ test.pb.read
 -
 -write_buf
 @28
+test.wb.clk_en
+test.wb.clk
 test.wb.erase
 @24
 test.wb.address[17:0]
+@28
+test.wb.start
 @22
 test.wb.data_write[15:0]
-@2024
-^3 /home/mattvenn/work/fpga/virtual-graffiti/write_buf_state_filter.txt
+@28
+test.wb.cam_valid
+test.wb.last_invalid
+@2025
+^3 /home/mattvenn/work/fpga/virtual-graffiti/tests/write_buf_state_filter.txt
 test.wb.state[4:0]
 @28
-test.wb.clk_en
 test.wb.ram_read
 test.wb.ram_write
 test.wb.ram_ready
@@ -85,7 +87,7 @@ test.vga_test.pixels[7:0]
 test.sram_test.data_write[15:0]
 test.sram_test.address[17:0]
 @2022
-^4 /home/mattvenn/work/fpga/virtual-graffiti/sram_state_filter.txt
+^4 /home/mattvenn/work/fpga/virtual-graffiti/tests/sram_state_filter.txt
 test.sram_test.state[2:0]
 @28
 test.sram_test.ready
