@@ -15,7 +15,6 @@ module camera(
     input wire i2c_sda_in,
     output wire i2c_sda_dir,
     output wire i2c_scl,
-    output wire i2c_start_out,
     output reg[9:0] x,
     output reg[9:0] y
 );
@@ -25,7 +24,6 @@ module camera(
     reg [4:0] packets;
     reg [3:0] state = STATE_START;
     reg i2c_start = 0;
-    assign i2c_start_out = i2c_start;
     wire i2c_ready;
     reg [7:0] i2c_data;
     wire [7:0] i2c_data_in;
