@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Mon Dec 26 20:02:10 2016
+[*] Wed Oct 11 16:32:30 2017
 [*]
-[dumpfile] "/home/mattvenn/work/fpga/ice-i2c/test.vcd"
-[dumpfile_mtime] "Mon Dec 26 19:59:23 2016"
-[dumpfile_size] 1817
-[savefile] "/home/mattvenn/work/fpga/ice-i2c/gtk-camera.gtkw"
-[timestart] 975
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/build/camera.vcd"
+[dumpfile_mtime] "Wed Oct 11 16:30:13 2017"
+[dumpfile_size] 2190
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/tests/gtk-camera.gtkw"
+[timestart] 0
 [size] 1440 876
 [pos] -1 -1
-*-4.051907 1003 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-9.051907 199 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.cam.
 [sst_width] 263
@@ -18,32 +18,22 @@
 [sst_vpaned_height] 399
 @28
 test.clk
-@22
-test.cam.debug[7:0]
-@28
 test.reset
 test.cam.data_ready
 test.cam.data_req
 @22
 test.cam.i2c_data[7:0]
-@c02024
-^1 /home/mattvenn/work/fpga/ice-i2c/camera_states.txt
-test.cam.state[8:0]
-@28
-(0)test.cam.state[8:0]
-(1)test.cam.state[8:0]
-(2)test.cam.state[8:0]
-(3)test.cam.state[8:0]
-(4)test.cam.state[8:0]
-(5)test.cam.state[8:0]
-(6)test.cam.state[8:0]
-(7)test.cam.state[8:0]
-(8)test.cam.state[8:0]
+@c00200
+-test.cam.state
 @1401200
 -group_end
 @24
-test.cam.data_byte[4:0]
 test.cam.config_byte[3:0]
+@2025
+^1 /home/mattvenn/work/fpga/virtual-graffiti/tests/camera_states.txt
+test.cam.state[3:0]
+@22
+test.cam.delay_count[7:0]
 @20000
 -
 @28
@@ -61,7 +51,7 @@ test.cam.i2c.data[7:0]
 @28
 test.cam.i2c_ready
 @2024
-^2 /home/mattvenn/work/fpga/ice-i2c/state_filter.txt
+^2 /home/mattvenn/work/fpga/virtual-graffiti/tests/state_filter.txt
 test.cam.i2c.state[8:0]
 @28
 test.cam.i2c.saved_rw

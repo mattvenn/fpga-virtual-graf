@@ -1,10 +1,10 @@
 `default_nettype none
-`define video
+//`define video
 `define camera
 //`define xyleds
 `define statusleds
-`define sram
-`define pixbuf
+//`define sram
+//`define pixbuf
 
 module top (
 	input  clk,
@@ -68,7 +68,6 @@ module top (
     reg[9:0] x;
     reg[9:0] y; // could be [8:0]
 
-    assign PMOD[31:24] = y;
 
     // pixart clock is 25MHz, reset low to reset
     assign pixart_reset = !reset;
@@ -77,13 +76,20 @@ module top (
     wire i2c_sda_out;
     wire i2c_sda_in;
 
-    // i2c clock enable generator
+    // i2c clock enable generator, vga clk is ~25Mhz, so clk enable is 500k, i2c clk will be 250k
     wire i2c_clk_en;
     divM #(.M(50)) clockdiv_cam(.clk_in(vga_clk), .clk_out(cam_clk));
     pulse i2c_clk_en_pulse (.clk(vga_clk), .in(cam_clk), .out(i2c_clk_en));
 
    `ifdef camera
-    camera cam(.i2c_sda_dir(i2c_sda_dir), .clk_en(i2c_clk_en), .clk (vga_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .x(x_cam), .y(y_cam)); //, .debug(PIO0));
+    camera cam(.i2c_sda_dir(i2c_sda_dir), .clk_en(i2c_clk_en), .clk (vga_clk), .reset (reset), .i2c_scl(i2c_scl), .i2c_sda_in(i2c_sda_in), .i2c_sda(i2c_sda_out), .x(x_cam), .y(y_cam), .i2c_start_out(PMOD[25])); //, .debug(PIO0));
+    assign PMOD[24] = i2c_clk_en;
+
+    assign PMOD[26] = i2c_sda_in;
+
+    assign PMOD[27] = i2c_scl;
+    assign PMOD[28] = reset;
+    assign PMOD[29] = i2c_sda_dir;
 
     // remap from 1024 x 768 -> 640 x 480
     map_cam mc(.clk(vga_clk), .reset(reset), .x_in(x_cam), .y_in(y_cam), .x_out(x), .y_out(y), .valid(cam_valid));

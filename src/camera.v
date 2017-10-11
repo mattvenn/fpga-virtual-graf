@@ -15,8 +15,9 @@ module camera(
     input wire i2c_sda_in,
     output wire i2c_sda_dir,
     output wire i2c_scl,
+    output wire i2c_start_out,
     output reg[9:0] x,
-    output reg[9:0] y,
+    output reg[9:0] y
 );
     localparam [8*6-1:0] config_data = 48'h300130083333; // 3 pairs of 2 config bytes
     reg [3:0] config_byte = 5;
@@ -24,6 +25,7 @@ module camera(
     reg [4:0] packets;
     reg [3:0] state = STATE_START;
     reg i2c_start = 0;
+    assign i2c_start_out = i2c_start;
     wire i2c_ready;
     reg [7:0] i2c_data;
     wire [7:0] i2c_data_in;
@@ -31,11 +33,12 @@ module camera(
     localparam i2c_addr = 7'h58;
     wire data_ready;
     wire data_req;
-    reg [6:0] delay_count = 0;
+    reg [7:0] delay_count = 0;
     // array makes synthesis much more efficient
     reg [7:0] pos_data [3:0]; // only need first 3 bytes
 
     localparam STATE_START = 0;
+    localparam STATE_START_WAIT = 11;
     localparam STATE_CONF = 1;
     localparam STATE_CONF_WAIT = 2;
     localparam STATE_CONF_DELAY = 3;
@@ -57,11 +60,17 @@ module camera(
         case(state)
             STATE_START: begin
                 if(i2c_ready) begin
-                    state <= STATE_CONF;
+                    state <= STATE_START_WAIT;
                     packets <= 2;
                     rw <= 0;
+                    delay_count <= 0;
                 end
             end
+            STATE_START_WAIT: begin
+                delay_count <= delay_count + 1;
+                if(delay_count > 200)
+                    state <= STATE_CONF;
+            end 
             STATE_CONF: begin
                 i2c_start <= 1;
                 if(i2c_ready == 0) begin

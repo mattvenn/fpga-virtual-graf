@@ -72,10 +72,8 @@ debug-master:
 	vvp i2c -fst
 	gtkwave test.vcd gtk-master.gtkw
 
-debug-camera:
-	iverilog -o camera camera_tb.v camera.v i2c_master.v 
-	vvp camera -fst
-	gtkwave test.vcd gtk-camera.gtkw
+$(BUILD_DIR)/camera.out: $(TEST_DIR)/camera_tb.v $(SRC_DIR)/camera.v $(SRC_DIR)/i2c_master.v
+	iverilog -o $(basename $@).out $^
 
 $(PROJ).size: $(PROJ).bin
 	du -b $< | cut -f1 > $@

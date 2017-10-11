@@ -19,11 +19,12 @@ my first 'proper' FPGA project.
 
 * [ICEfloorplan](https://knielsen.github.io/ice40_viewer/ice40_viewer.html) shows how the design is laid out on the FPGA
 * Yosys can generate output graphs of the verilog with the [show](http://www.clifford.at/yosys/cmd_show.html) command.
+* [schematic for mystorm](https://gitlab.com/Folknology/mystorm/blob/BlackIce/BlackIce-schematic.pdf)
 
 # Storing configuration on the board
 
 [Instructions
-here](https://forum.mystorm.uk/t/config-from-non-voltatile-memory/242/5)
+here](https://forum.mystorm.uk/t/config-from-non-voltatile-memory/242/2)
 
 # SRAM video buffer
 
