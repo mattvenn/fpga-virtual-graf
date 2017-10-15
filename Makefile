@@ -1,17 +1,21 @@
 DEVICE = hx8k
 SRC_DIR = src
 TEST_DIR = tests
-SVG_DIR = docs/svg
+DOCS_DIR = docs
+SVG_DIR = $(DOCS_DIR)/svg
+SVG_PORT_DIR = $(DOCS_DIR)/module_port_svg
 BUILD_DIR = build
 PROJ = $(BUILD_DIR)/vgraf
 PIN_DEF = $(SRC_DIR)/blackice.pcf
 SHELL := /bin/bash # Use bash syntax
 
-VERILOG = top.v i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
+MODULES = i2c_master.v camera.v xy_leds.v dvid.v vga.v clockdiv.v sram.v pixel_buffer.v write_buffer.v bresenham.v map_cam.v pulse.v
+VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
 all: $(PROJ).bin $(PROJ).rpt 
 svg: $(patsubst %.v,%.svg,$(SRC))
+port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 
 # $@ The file name of the target of the rule.rule
 # $< first pre requisite
@@ -22,6 +26,11 @@ svg: $(patsubst %.v,%.svg,$(SRC))
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
 	mv $@ $(SVG_DIR)
 	rm $(basename $@).dot
+
+# rule for building svg version of module ports
+$(SVG_PORT_DIR)/%.svg: $(SRC_DIR)/%.v
+	python $(DOCS_DIR)/ports_to_svg.py $^
+	dot -Tsvg out.dot -o $@
 
 # rules for building the blif file
 $(BUILD_DIR)/%.blif: $(SRC)
