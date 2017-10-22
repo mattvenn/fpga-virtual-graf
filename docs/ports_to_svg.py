@@ -46,13 +46,11 @@ def main():
     
     module = verilog_module.module()
     show(ast, module)
-    from pprint import pprint
-    pprint(module.zip_ports())
     with open('out.dot', 'w' ) as fh:
         fh.write(module.render("port_template.dot"))
 
       
-def print_io_port(ch, module):
+def get_io_port(ch, module):
     children = ch.children()
     direction = children[0].__class__.__name__
     name = children[0].name
@@ -65,9 +63,8 @@ def print_io_port(ch, module):
 
 def show(ch, module):
     if(ch.__class__ == pyverilog.vparser.ast.Ioport):
-        print_io_port(ch, module)
+        get_io_port(ch, module)
     if(ch.__class__ == pyverilog.vparser.ast.ModuleDef):
-        #print("module name: " + ch.name)
         module.set_name(ch.name)
         
     for i in ch.children():
