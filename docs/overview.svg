@@ -10,26 +10,30 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="1488.189"
+   height="1052.3622"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="overview.png">
+   sodipodi:docname="overview.svg"
+   inkscape:export-filename="/home/mattvenn/work/fpga/virtual-graffiti/docs/overview-a3.png"
+   inkscape:export-xdpi="316.55679"
+   inkscape:export-ydpi="316.55679">
   <defs
      id="defs4">
     <marker
        inkscape:stockid="Arrow1Lend"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow1Lend"
-       style="overflow:visible;">
+       style="overflow:visible">
       <path
          id="path4101"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
-         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
     </marker>
     <clipPath
        clipPathUnits="userSpaceOnUse"
@@ -67,6 +71,20 @@
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
          transform="matrix(-0.8,0,0,-0.8,-10,0)" />
     </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend-3"
+       style="overflow:visible">
+      <path
+         id="path4101-9"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -76,19 +94,23 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="407.07301"
+     inkscape:cx="643.6071"
      inkscape:cy="536.22892"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1440"
-     inkscape:window-height="876"
+     inkscape:window-width="1600"
+     inkscape:window-height="1176"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
-       id="grid3322" />
+       id="grid3322"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -105,56 +127,60 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,2.988066e-5)">
     <text
        xml:space="preserve"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
-       x="442.89716"
-       y="877.88519"
+       x="872"
+       y="392.36215"
        id="text3186-6"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="442.89716"
-         y="877.88519"
+         x="872"
+         y="392.36215"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
-         id="tspan3224">myStorm FPGA</tspan></text>
+         id="tspan3224">FPGA</tspan></text>
     <image
-       y="-1106.4574"
-       x="-2159.623"
-       id="image3047"
-       xlink:href="file:///home/mattvenn/work/fpga/ice-i2c/docs/can.jpg"
-       height="2304"
-       width="4096"
+       sodipodi:absref="/home/mattvenn/work/fpga/virtual-graffiti/docs/can.jpg"
+       xlink:href="can.jpg"
+       transform="matrix(0.11183926,0,0,0.11183926,233.26426,499.68934)"
        clip-path="url(#clipPath3052)"
-       transform="matrix(0.11039598,0,0,0.11039598,220.87325,377.13202)" />
+       width="4096"
+       height="2304"
+       id="image3047"
+       x="-2159.623"
+       y="-1106.4574" />
     <image
-       y="624.76721"
-       x="421.06824"
+       sodipodi:absref="/home/mattvenn/work/fpga/virtual-graffiti/docs/myStorm_1024w.jpg"
+       xlink:href="myStorm_1024w.jpg"
+       width="296.42102"
+       height="220"
        id="image3115"
-       xlink:href="file:///home/mattvenn/work/fpga/ice-i2c/docs/myStorm_1024w.jpg"
-       height="214.09525"
-       width="288.46515" />
+       x="770"
+       y="412.36215" />
     <image
-       y="655.07648"
-       x="-191.42857"
-       id="image3177"
-       xlink:href="file:///home/mattvenn/work/fpga/ice-i2c/docs/wii_sensor_03.jpg"
-       height="666"
-       width="1000"
+       sodipodi:absref="/home/mattvenn/work/fpga/virtual-graffiti/docs/wii_sensor_03.jpg"
+       xlink:href="wii_sensor_03.jpg"
+       transform="matrix(0.36511025,0,0,0.36511025,431.40836,150.43777)"
        clip-path="url(#clipPath3182)"
-       transform="matrix(0.37957679,0,0,0.37957679,463.06168,21.519587)" />
+       width="1000"
+       height="666"
+       id="image3177"
+       x="-191.42857"
+       y="655.07648" />
     <text
        xml:space="preserve"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
-       x="21.903627"
-       y="277.56525"
+       x="85.903625"
+       y="391.56525"
        id="text3186"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3188"
-         x="21.903627"
-         y="277.56525"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana">Infra red spray can</tspan></text>
+         x="85.903625"
+         y="391.56525"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana">Infra red can</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
@@ -169,49 +195,45 @@
     <text
        xml:space="preserve"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
-       x="431.29956"
-       y="277.93875"
+       x="450"
+       y="392.36215"
        id="text3186-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3188-6"
-         x="431.29956"
-         y="277.93875"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana">Wiimote IR camera</tspan></text>
+         x="450"
+         y="392.36215"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana">IR camera</tspan></text>
     <image
-       y="628.16711"
-       x="37.405743"
+       sodipodi:absref="/home/mattvenn/work/fpga/virtual-graffiti/docs/dell.jpg"
+       xlink:href="dell.jpg"
+       width="271.24121"
+       height="222.14938"
        id="image3285"
-       xlink:href="file:///home/mattvenn/work/fpga/ice-i2c/docs/dell.jpg"
-       height="222.1494"
-       width="271.24124" />
+       x="1170"
+       y="410.21277" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot3288"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:From Cartoon Blocks;font-style:normal;font-weight:normal;font-size:64px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:From Cartoon Blocks;font-stretch:normal;font-variant:normal"><flowRegion
+       style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"><flowRegion
          id="flowRegion3290"><rect
            id="rect3292"
            width="636.39612"
            height="139.40105"
            x="1258.65"
            y="409.90515" /></flowRegion><flowPara
-         id="flowPara3294"></flowPara></flowRoot>    <text
+         id="flowPara3294" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
-       x="106.54744"
-       y="878.12714"
+       x="1250"
+       y="392.36215"
        id="text3186-6-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="106.54744"
-         y="878.12714"
+         x="1250"
+         y="392.36215"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
          id="tspan3224-1">Display</tspan></text>
-    <path
-       style="color:#000000;fill:none;stroke:#000000;stroke-width:2.52530813;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 569.94392,530.46957 0,79.22535"
-       id="path3324"
-       inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
        style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
@@ -226,69 +248,80 @@
     <text
        sodipodi:linespacing="125%"
        id="text4542"
-       y="685.94934"
-       x="332.26785"
+       y="492.36215"
+       x="1090"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
-         y="685.94934"
-         x="332.26785"
+         y="492.36215"
+         x="1090"
          id="tspan4544"
          sodipodi:role="line">DVI</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:31.69014168px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
-       x="589.75024"
-       y="586.91766"
+       x="696"
+       y="492.36215"
        id="text4546"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4548"
-         x="589.75024"
-         y="586.91766"
+         x="696"
+         y="492.36215"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana">I2C</tspan></text>
     <path
        style="color:#000000;fill:none;stroke:#000000;stroke-width:2.52530813;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 401.3071,725.56201 -79.22537,0"
+       d="m 1079.8139,526.26053 79.2253,0"
        id="path3324-3"
        inkscape:connector-curvature="0" />
-    <rect
-       style="fill:#00ff00;fill-opacity:1;stroke:none"
-       id="rect4658"
-       width="668.57141"
-       height="105.71429"
-       x="34.285713"
-       y="132.36218" />
     <text
        sodipodi:linespacing="125%"
        id="text4576"
-       y="220.40353"
-       x="41.36644"
-       style="font-size:83.495224px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
+       y="268.36215"
+       x="180"
+       style="font-size:111.27413177px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
-         y="220.40353"
-         x="41.36644"
+         y="268.36215"
+         x="180"
          id="tspan4578"
-         sodipodi:role="line">Virtual FPGAffiti</tspan></text>
-    <rect
-       style="fill:#00ff00;fill-opacity:1;stroke:none"
-       id="rect4660"
-       width="671.42859"
-       height="94.285713"
-       x="31.428572"
-       y="898.07648" />
+         sodipodi:role="line">FPGA Virtual Graffiti</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4576-4"
-       y="957.08496"
-       x="31.382927"
+       y="784.36218"
+       x="400"
        style="font-size:59.96006775px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:From Cartoon Blocks;-inkscape-font-specification:From Cartoon Blocks"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
-         y="957.08496"
-         x="31.382927"
+         y="784.36218"
+         x="400"
          id="tspan4578-8"
-         sodipodi:role="line">http://ven.nz/vg-fpga</tspan></text>
+         sodipodi:role="line">Matt Venn 2016-2017</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
+         y="859.31226"
+         x="400"
+         sodipodi:role="line"
+         id="tspan3031">matt@mattvenn.net</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Verdana;-inkscape-font-specification:Verdana"
+         y="934.26233"
+         x="400"
+         sodipodi:role="line"
+         id="tspan3033">http://bit.ly/fpga-vg</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3023"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Arial;font-style:normal;font-weight:normal;font-size:12px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Arial;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr"><flowRegion
+         id="flowRegion3025"><rect
+           id="rect3027"
+           width="1217.1428"
+           height="1055.7142"
+           x="-95.714287"
+           y="59.505039" /></flowRegion><flowPara
+         id="flowPara3029"></flowPara></flowRoot>    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:2.52530813;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 688.38532,527.68911 79.2253,0"
+       id="path3324-3-9"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
