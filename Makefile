@@ -21,6 +21,15 @@ port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 # $< first pre requisite
 # $^ names of all preerquisites
 
+# A3 = 297 x 420mm. 300dpi ~ 12 pix per mm. size in pixels is 3500 x 4960
+%.png: %.svg
+	convert -density 300 -resize 4960 $< $@
+
+# export ps from vim: :hardcopy > file.ps
+# split multipage ps: gs -dBATCH -dNOPAUSE -sDEVICE=ps2write -sOutputFile=vga%03d.ps vga.ps
+%.png: %.ps
+	convert -background "#FFFFFF" -flatten -density 300 -resize 4960x3500 $< $@
+
 # rule for building svg graphs of the modules
 %.svg: %.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
