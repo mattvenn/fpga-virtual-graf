@@ -31,6 +31,7 @@ port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 $(SVG_PORT_DIR)/%.svg: $(SRC_DIR)/%.v
 	python $(DOCS_DIR)/ports_to_svg.py $^
 	dot -Tsvg out.dot -o $@
+#	rm out.dot
 
 # rules for building the blif file
 $(BUILD_DIR)/%.blif: $(SRC)
@@ -99,6 +100,8 @@ prog: $(PROJ).bin
 
 clean:
 	rm -f $(BUILD_DIR)/*
+	rm -f $(SVG_DIR)/*svg
+	rm -f $(SVG_PORT_DIR)/*svg
 
 .SECONDARY:
 .PHONY: all prog clean svg
