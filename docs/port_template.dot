@@ -16,7 +16,7 @@ digraph test {
                         {% for in, out in module.zip_ports() %}
                             <TR>
                                 <TD height="40" port="{{in.name}}">{{in.name}}</TD> // in ports
-                                <TD width="40px"></TD>                              // separator
+                                <TD width="40"></TD>                              // separator
                                 <TD port="{{out.name}}">{{out.name}}</TD>           // out ports
                             </TR>
                         {% endfor %}
@@ -29,13 +29,13 @@ digraph test {
     // inputs
     edge [arrowhead="boxvee"]
     {% for in in module.get_in_ports() %}
-        {{ in.name }}   -> mapcam:{{ in.name }}   [label = {{ in.width }}]
+        {{ in.name }}   -> mapcam:{{ in.name }}   [{% if in.type == "Reg" %}arrowhead="oboxvee"{% endif %} label = {{ in.width }}]
     {% endfor %}
 
     // outputs
     edge [dir=both arrowhead="vee" arrowtail="box"]
     {% for out in module.get_out_ports() %}
-        mapcam:{{ out.name }} -> {{ out.name }}   [label = {{ out.width }}]
+        mapcam:{{ out.name }} -> {{ out.name }}   [{% if out.type == "Reg" %}arrowtail="obox"{% endif %} label = {{ out.width }}]
     {% endfor %}
 }
 
