@@ -11,8 +11,12 @@ my first 'proper' FPGA project.
 # Things to do
 
 * default cases for state machines
-* won't draw without first reset
 * docs
+    * svg overview
+    * floorplan
+    * simple module, verilog and svg
+    * complex module, verilog and svg
+    * coverpage
 
 # Documentation
 
