@@ -12,7 +12,7 @@
 
 # Documentation
 
-* [system overview diagram](docs/module-overview.svg)
+* [system overview diagram](docs/module_overview.svg)
 * Yosys can generate output graphs of the verilog with the [show](http://www.clifford.at/yosys/cmd_show.html) command.
 * [schematic for mystorm](https://gitlab.com/Folknology/mystorm/blob/BlackIce/BlackIce-schematic.pdf)
 * [ICEfloorplan](https://knielsen.github.io/ice40_viewer/ice40_viewer.html) can be used to show how the design is laid out on the FPGA
