@@ -1,0 +1,25 @@
+[*]
+[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
+[*] Tue Oct 24 11:37:01 2017
+[*]
+[dumpfile] "/home/mattvenn/work/fpga/virtual-graffiti/build/pulse.vcd"
+[dumpfile_mtime] "Tue Oct 24 11:36:40 2017"
+[dumpfile_size] 595
+[savefile] "/home/mattvenn/work/fpga/virtual-graffiti/tests/gtk-pulse.gtkw"
+[timestart] 0
+[size] 1450 600
+[pos] -1 -1
+*-2.950369 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[sst_width] 263
+[signals_width] 80
+[sst_expanded] 1
+[sst_vpaned_height] 155
+@28
+test.clk
+test.reset
+test.in
+@29
+test.pulse_test.out
+[pattern_trace] 1
+[pattern_trace] 0

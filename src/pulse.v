@@ -6,7 +6,6 @@ module pulse (
     output reg out
     );
 
-    reg out;
     reg last;
     always @(posedge clk) begin
         if(reset)begin
