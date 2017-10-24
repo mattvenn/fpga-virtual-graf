@@ -9,3 +9,7 @@
     * complex module, verilog and svg (bresenham.v) - done
     * coverpage - done
     * some kind of hand out with all the links - print a few README.md
+    * output of yosys netlist?
+    * lut definition of lattice - done
+    * gtkwave signals
+* recut case

@@ -16,10 +16,30 @@
 * Yosys can generate output graphs of the verilog with the [show](http://www.clifford.at/yosys/cmd_show.html) command.
 * [schematic for mystorm](https://gitlab.com/Folknology/mystorm/blob/BlackIce/BlackIce-schematic.pdf)
 * [ICEfloorplan](https://knielsen.github.io/ice40_viewer/ice40_viewer.html) can be used to show how the design is laid out on the FPGA
-* [All Verilog source](src)
+* [All Verilog source](src) and [tests](tests)
 
 # Build notes
 
+## Synthesis
+
+    make
+
+To program the mystorm board, first start a terminal listening on /dev/ttyUSBX
+at 115200 baud, and reset the board. Then type:
+
+    make prog
+
+## Tests
+
+many test benches are in [tests](tests). They can be simulated and outputs
+viewed with gtkwave:
+
+    make debug-[name of verilog file]
+
+eg
+
+    make debug-bresenham
+    
 ## Storing configuration on the board
 
 [Instructions
