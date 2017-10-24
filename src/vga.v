@@ -33,7 +33,6 @@ Vertical Timing
 45 blank lines at the bottom, 800 pix wide = 36k clocks for other things
 
 */
-
 `default_nettype none
 module vga (
 	input wire clk,
@@ -50,8 +49,7 @@ module vga (
     output reg lower_blank
     );
 
-//    reg [10:0] hcounter = 0;
-//    reg [9:0] vcounter = 0;
+    localparam border_w = 10;
 
 	always@(hcounter or vcounter) begin // results in a note about combinatorial logic
         // black everywhere
@@ -77,27 +75,20 @@ module vga (
            lower_blank <= 1'b1;
 
         // top and bottom border
-        if(vcounter < 10 || ( vcounter > 470 && vcounter < 480)) begin
+        if(vcounter < border_w || ( vcounter > 480 - border_w && vcounter < 480)) begin
                 red <= 3'b111;
-                green <= 3'b111;
+                green <= 3'b000;
                 blue <= 3'b111;
         end 
         // left and right border
-        if(hcounter < 10 || ( hcounter > 630 && hcounter < 640)) begin
+        if(hcounter < border_w || ( hcounter > 640 - border_w && hcounter < 640)) begin
             red <= 3'b111;
-            green <= 3'b111;
+            green <= 3'b000;
             blue <= 3'b111;
         end
-        // lines every 8 pixels
-        /*
-        if(hcounter[2:0] == 0) begin
-            red <= 3'b111;
-            blue <= 3'b111;
-        end
-        */
         // data from pixel register
         if(pixels[hcounter])  begin
-            red <= 3'b111;
+            red <= 3'b000;
             green <= 3'b111;
             blue <= 3'b111;
         end 
