@@ -79,14 +79,12 @@ module vga (
                 red <= 3'b111;
                 green <= 3'b000;
                 blue <= 3'b111;
-        end 
-        // left and right border
+        end else // left and right border
         if(hcounter < border_w || ( hcounter > 640 - border_w && hcounter < 640)) begin
             red <= 3'b111;
             green <= 3'b000;
             blue <= 3'b111;
-        end
-        // data from pixel register
+        end else // data from pixel register
         if(pixels[hcounter])  begin
             red <= 3'b000;
             green <= 3'b111;
