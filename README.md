@@ -13,7 +13,7 @@
 # Top resource tips
 
 * [Obijuan's FPGA tutorial](https://github.com/Obijuan/open-fpga-verilog-tutorial/wiki)
-* [FPGAwars forum](://groups.google.com/forum/#!forum/fpga-wars-explorando-el-lado-libre)
+* [FPGAwars forum](https://groups.google.com/forum/#!forum/fpga-wars-explorando-el-lado-libre)
 * [Dan's FPGA blog](http://www.zipcpu.com/)
 
 # Documentation
