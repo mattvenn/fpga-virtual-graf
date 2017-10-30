@@ -14,7 +14,7 @@ VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
 all: $(PROJ).bin $(PROJ).rpt 
-svg: $(patsubst %.v,%.svg,$(SRC))
+mod_svg: $(patsubst %.v,$(SVG_DIR)/%.svg,$(MODULES))
 port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 
 # $@ The file name of the target of the rule.rule
@@ -31,10 +31,8 @@ port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 	convert -background "#FFFFFF" -flatten -density 300 -resize 4960x3500 $< $@
 
 # rule for building svg graphs of the modules
-%.svg: %.v
-	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
-	mv $@ $(SVG_DIR)
-	rm $(basename $@).dot
+$(SVG_DIR)/%.svg: $(SRC_DIR)/%.v
+	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $@"
 
 # rule for building svg version of module ports
 $(SVG_PORT_DIR)/%.svg: $(SRC_DIR)/%.v
