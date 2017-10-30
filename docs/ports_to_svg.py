@@ -47,7 +47,7 @@ def main():
     module = verilog_module.module()
     show(ast, module)
     with open('out.dot', 'w' ) as fh:
-        fh.write(module.render("port_template.dot"))
+        fh.write(module.render("docs/port_template.dot"))
 
       
 def get_io_port(ch, module):
