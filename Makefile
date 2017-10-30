@@ -32,7 +32,7 @@ port_svg: $(patsubst %.v,$(SVG_PORT_DIR)/%.svg,$(MODULES))
 
 # rule for building svg graphs of the modules
 $(SVG_DIR)/%.svg: $(SRC_DIR)/%.v
-	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $@"
+	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed -format svg -prefix $(basename $@)"
 
 # rule for building svg version of module ports
 $(SVG_PORT_DIR)/%.svg: $(SRC_DIR)/%.v
