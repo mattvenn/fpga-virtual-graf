@@ -2,7 +2,7 @@
 
 ![overview](docs/overview.png)
 
-[example output and construction photos](https://photos.app.goo.gl/kivlfcmlp4oecVpu1)
+[videos and construction photos](https://photos.app.goo.gl/kivlfcmlp4oecVpu1)
 
 # Tools used
 
